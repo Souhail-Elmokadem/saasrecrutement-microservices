@@ -1,0 +1,224 @@
+<app-navbar-min></app-navbar-min>
+<div class="h-10 w-10"></div>
+<div class="h-screen pt-10" *ngIf="step <= 5">
+    <div class="max-w-3xl mx-auto px-4 py-10">
+  
+      <!-- ✅ Final Step (Success message) -->
+      <div *ngIf="step === 5" class="bg-white rounded-lg p-10 flex items-center shadow justify-between">
+        <div class="w-full">
+          <svg class="mb-4 h-20 w-20 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <h2 class="text-2xl mb-4 text-gray-800 text-center font-bold">Registration Success</h2>
+          <div class="text-gray-600 mb-8 text-center">
+            Thank you. We have sent you an email to demoemo.test. Please click the link in the message to activate your account.
+          </div>
+          <button (click)="reset()" class="w-40 block mx-auto py-2 px-5 rounded-lg shadow-sm text-gray-600 bg-white hover:bg-gray-100 font-medium border">
+            Back to home
+          </button>
+        </div>
+      </div>
+  
+      <!-- ✅ Steps Form -->
+      <div *ngIf="step < 5">
+        <!-- Step Indicator -->
+        <div class="border-b-2 py-4">
+          <div class="uppercase tracking-wide text-xs font-bold text-gray-500 mb-1 leading-tight">
+            Step: {{ step }} of 4
+          </div>
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+            <div class="flex-1">
+              <div *ngIf="step === 1" class="text-lg font-bold text-gray-700 leading-tight">Your Profile</div>
+              <div *ngIf="step === 2" class="text-lg font-bold text-gray-700 leading-tight">Your Password</div>
+              <div *ngIf="step === 3" class="text-lg font-bold text-gray-700 leading-tight">Tell me about yourself</div>
+              <div *ngIf="step === 4" class="text-lg font-bold text-gray-700 leading-tight">Experience</div>
+
+            </div>
+            <div class="flex items-center md:w-64">
+              <div class="w-full bg-white rounded-full mr-2">
+                <div class="rounded-full bg-green-500 h-2 text-center text-white"
+                     [style.width.%]="(step / 4) * 100"></div>
+              </div>
+              <div class="text-xs w-10 text-gray-600">{{ (step / 4 * 100) | number: '1.0-0' }}%</div>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Step Content -->
+        <div class="py-10">
+  
+          <!-- Step 1: Profile -->
+          <div *ngIf="step === 1">
+            <div class="mb-5 text-center">
+              <div class="mx-auto w-32 h-32 mb-4 border rounded-full relative bg-gray-100 shadow-inset">
+                <img class="object-cover w-full h-32 rounded-full" [src]="image" />
+              </div>
+  
+              <label for="fileInput" class="cursor-pointer inline-flex items-center py-2 px-4 rounded-lg shadow-sm text-gray-600 bg-white hover:bg-gray-100 font-medium border">
+                <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" stroke-width="2"
+                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 7h1a2 2 0 002-2 1 1 0 011-1h6a1 1 0 011 1 2 2 0 002 2h1a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2z" />
+                  <circle cx="12" cy="13" r="3" />
+                </svg>
+                Browse Photo
+              </label>
+  
+              <input id="fileInput" type="file" accept="image/*" hidden (change)="onImageChange($event)" />
+              <div class="text-xs text-gray-500 text-center mt-1">Click to add profile picture</div>
+            </div>
+  
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">first Complete</label>
+              <input type="text" [(ngModel)]="firstName" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                     placeholder="Enter your firstname...">
+            </div>
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">last Complete</label>
+              <input type="text" [(ngModel)]="lastName" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                     placeholder="Enter your firstname...">
+            </div>
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">Email</label>
+              <input type="email" [(ngModel)]="email" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                     placeholder="Enter your email address...">
+            </div>
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">Tel</label>
+              <input type="email"  [(ngModel)]="tel" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                     placeholder="212 6 00 0000 000">
+            </div>
+          </div>
+  
+          <!-- Step 2: Password -->
+          <div *ngIf="step === 2">
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">Set up password</label>
+              <div class="text-gray-600 mt-2 mb-4">
+                <ul class="list-disc text-sm ml-4 mt-2">
+                  <li>lowercase letters</li>
+                  <li>numbers</li>
+                  <li>capital letters</li>
+                  <li>special characters</li>
+                </ul>
+              </div>
+  
+              <div class="relative">
+                <input [type]="togglePassword ? 'text' : 'password'"
+                       [(ngModel)]="password"
+                       (keydown)="checkPasswordStrength()"
+                       class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                       placeholder="Your strong password...">
+                <div class="absolute right-0 top-0 px-3 py-3 cursor-pointer" (click)="togglePassword = !togglePassword">
+                  <svg *ngIf="togglePassword" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.106.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684L22.054 12l-.106-.316C21.927 11.617 19.633 5 12 5z" />
+                  </svg>
+                  <svg *ngIf="!togglePassword" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </div>
+              </div>
+  
+              <div class="flex items-center mt-4 h-3">
+                <div class="w-2/3 flex justify-between h-2">
+                  <div class="h-2 rounded-full mr-1 w-1/3"
+                       [ngClass]="{'bg-red-400': passwordStrengthText === 'Too weak' || passwordStrengthText === 'Could be stronger' || passwordStrengthText === 'Strong password'}">
+                  </div>
+                  <div class="h-2 rounded-full mr-1 w-1/3"
+                       [ngClass]="{'bg-orange-400': passwordStrengthText === 'Could be stronger' || passwordStrengthText === 'Strong password'}">
+                  </div>
+                  <div class="h-2 rounded-full w-1/3"
+                       [ngClass]="{'bg-green-400': passwordStrengthText === 'Strong password'}">
+                  </div>
+                </div>
+                <div class="text-gray-500 font-medium text-sm ml-3">{{ passwordStrengthText }}</div>
+              </div>
+            </div>
+          </div>
+  
+          <!-- Step 3: Personal info -->
+          <div *ngIf="step === 3">
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">Gender</label>
+              <div class="flex">
+                <label class="flex items-center bg-white px-4 py-3 shadow-sm mr-4 rounded-lg">
+                  <input type="radio" [(ngModel)]="gender" value="Male" class="form-radio mr-2" /> Male
+                </label>
+                <label class="flex items-center bg-white px-4 py-3 shadow-sm rounded-lg">
+                  <input type="radio" [(ngModel)]="gender" value="Female" class="form-radio mr-2" /> Female
+                </label>
+              </div>
+            </div>
+  
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">Profession</label>
+              <input type="text" [(ngModel)]="profession" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                     placeholder="e.g. Web Developer">
+            </div>
+            <div class="mb-5">
+              <label class="font-bold mb-1 text-gray-700 block">Profile</label>
+              <input type="text" [(ngModel)]="profile" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
+                     placeholder="Profile ex. etre motive fullstack developper ...">
+            </div>
+            <input [(ngModel)]="competenceInput" class="w-full p-2 mb-4 border rounded" placeholder="Add Competence">
+        <button (click)="addCompetence()" class="mb-4 underline">+ Add Competence</button>
+        <ul>
+          <li *ngFor="let comp of competences">{{ comp }}</li>
+        </ul>
+            <input [(ngModel)]="interestInput" class="w-full p-2 mb-4 border rounded" placeholder="Add Interest">
+        <button (click)="addInterest()" class="mb-4 underline">+ Add Interest</button>
+        <ul>
+          <li *ngFor="let interest of centreInterets">{{ interest }}</li>
+        </ul>
+           
+          </div>
+          <div *ngIf="step === 4">
+            <div *ngFor="let exp of experience; let i = index" class="mb-4 border p-4 rounded">
+              <input [(ngModel)]="exp.title" class="w-full p-2 mb-2 border rounded" placeholder="Title">
+              <input [(ngModel)]="exp.company" class="w-full p-2 mb-2 border rounded" placeholder="Company">
+              <input [(ngModel)]="exp.duration" class="w-full p-2 mb-2 border rounded" placeholder="Duration">
+              <textarea [(ngModel)]="exp.description" class="w-full p-2 border rounded" placeholder="Description"></textarea>
+            </div>
+            <button (click)="addExperience()" class="underline">+ Add Experience</button>
+
+
+            <h3 class="font-bold mt-4">Formations</h3>
+            <div *ngFor="let form of formations; let i = index" class="mb-4">
+              <input [(ngModel)]="form.diploma" class="w-full p-2 mb-2 border rounded" placeholder="Diploma">
+              <input [(ngModel)]="form.school" class="w-full p-2 mb-2 border rounded" placeholder="School">
+              <input [(ngModel)]="form.year" class="w-full p-2 border rounded" placeholder="Year">
+            </div>
+            <button (click)="addFormation()" class="underline">+ Add Formation</button>
+          </div>
+    
+          </div>
+    
+  
+        <!-- Bottom Navigation -->
+        <div class="fixed bottom-0 left-0 right-0 py-5 bg-white shadow-md">
+          <div class="max-w-3xl mx-auto px-4 flex justify-between">
+            <button *ngIf="step > 1"
+                    (click)="previousStep()"
+                    class="w-32 py-2 px-5 rounded-lg shadow-sm text-gray-600 bg-white hover:bg-gray-100 font-medium border">
+              Previous
+            </button>
+  
+            <div class="text-right">
+              <button *ngIf="step < 4"
+                      (click)="nextStep()"
+                      class="w-32 py-2 px-5 rounded-lg shadow-sm text-white bg-blue-500 hover:bg-blue-600 font-medium">
+                Next
+              </button>
+  
+              <button *ngIf="step === 4"
+                      (click)="completeRegistration()"
+                      class="w-32 py-2 px-5 rounded-lg shadow-sm text-white bg-blue-500 hover:bg-blue-600 font-medium">
+                Complete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
