@@ -15,6 +15,7 @@ import { ChoixTemplateComponent } from './shared/pages/candidate/choix-template/
 import { ModeleClassicComponent } from './shared/pages/candidate/previewcv/modele-classic/modele-classic.component';
 import { ListCvsComponent } from './shared/pages/candidate/list-cvs/list-cvs.component';
 import { ChoixCreationcvComponent } from './shared/pages/candidate/choix-creationcv/choix-creationcv.component';
+import { UpdatecvComponent } from './shared/pages/candidate/updatecv/updatecv.component';
 
 export const routes: Routes = [
 
@@ -32,7 +33,8 @@ export const routes: Routes = [
           data: { roles: ['CANDIDAT']}},
           { path: 'cv/uploaded/:id', component: CreationcvComponent,   canActivate: [AuthGuard],
             data: { roles: ['CANDIDAT']}}
-          ,
+          ,{ path: 'cv/update/:id', component: UpdatecvComponent,   canActivate: [AuthGuard],
+            data: { roles: ['CANDIDAT']}},
         {path:'modele/:id' , component: ChoixTemplateComponent},
 
         

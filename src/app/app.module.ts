@@ -30,6 +30,7 @@ import { ModeleEtalentlyComponent } from './shared/pages/candidate/previewcv/mod
 import { ListCvsComponent } from './shared/pages/candidate/list-cvs/list-cvs.component';
 import { ChoixCreationcvComponent } from './shared/pages/candidate/choix-creationcv/choix-creationcv.component';
 import { TimeAgoPipe } from './shared/pipes/time-ago.pipe';
+import { UpdatecvComponent } from './shared/pages/candidate/updatecv/updatecv.component';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -61,6 +62,7 @@ function initializeKeycloak(keycloak: KeycloakService) {
     ListCvsComponent,
     ChoixCreationcvComponent,
     TimeAgoPipe,
+    UpdatecvComponent,
  
   ],
   imports: [

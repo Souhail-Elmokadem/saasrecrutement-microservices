@@ -105,10 +105,12 @@ export class CreationcvComponent implements OnInit {
 this.currentEducationIndex = 0;
 
   }
+
   normalizeMonthFormat(date?: string): string {
     if (!date) return '';
     return date.length === 4 ? `${date}-01` : date; // Si "2020" => "2020-01"
   }
+  
     sections = [
       { label: 'Contact', value: 'contact' },
       { label: 'Experience', value: 'experience' },

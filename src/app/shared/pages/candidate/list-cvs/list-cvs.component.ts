@@ -10,6 +10,11 @@ import { CvserviceService } from '../../../../core/services/cv-service/cvservice
   styleUrl: './list-cvs.component.css'
 })
 export class ListCvsComponent implements OnInit{
+
+
+
+
+ 
   cvs:Cv[]=[];
 
   constructor(private route:Router,private cvservice:CvserviceService ){}
