@@ -1,0 +1,33 @@
+version: "3.8"
+services:
+
+
+  consul:
+    image: consul:1.15.4
+    container_name: consul
+    ports:
+      - "8500:8500"     # UI web
+      - "8600:8600/udp" # DNS discovery
+    command: agent -dev -ui -client=0.0.0.0
+    networks:
+      - backend
+
+#  gateway-service:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    container_name: gateway-service
+#    ports:
+#      - "9090:9090"
+#    networks:
+#      - backend
+#    depends_on:
+#      - consul
+
+
+networks:
+  backend:
+    external: true
+
+volumes:
+  user_data:
