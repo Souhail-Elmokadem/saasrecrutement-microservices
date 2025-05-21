@@ -1,0 +1,51 @@
+#version: "3.8"
+#services:
+##  user-db:
+##    image: mysql:8.0
+##    container_name: mysql_user_service
+##    restart: always
+##    environment:
+##      MYSQL_ROOT_PASSWORD: root
+##      MYSQL_DATABASE: userdb
+##      MYSQL_USER: user
+##      MYSQL_PASSWORD: userpass
+##    ports:
+##      - "3307:3306"
+##    volumes:
+##      - user_data:/var/lib/mysql
+##    networks:
+##      - backend
+##
+##  user-service:
+##    build:
+##      context: .
+##      dockerfile: Dockerfile
+##    container_name: user-service
+##    depends_on:
+##      - user-db
+##      - consul
+##    environment:
+##      SPRING_DATASOURCE_URL: jdbc:mysql://user-db:3306/userdb
+##      SPRING_DATASOURCE_USERNAME: user
+##      SPRING_DATASOURCE_PASSWORD: userpass
+##      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/recrutementsaas
+##    ports:
+##      - "8066:8066"
+##    networks:
+##      - backend
+#  consul:
+#    image: consul:1.15.4
+#    container_name: consul
+#    ports:
+#      - "8500:8500"     # UI web
+#      - "8600:8600/udp" # DNS discovery
+#    command: agent -dev -ui -client=0.0.0.0
+#    networks:
+#      - backend
+#
+#networks:
+#  backend:
+#    external: true
+#
+#volumes:
+#  user_data:
