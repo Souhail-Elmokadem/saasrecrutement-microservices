@@ -1,41 +1,45 @@
-import { provideRouter } from '@angular/router';
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import {
-  provideKeycloak,
-  createInterceptorCondition,
-  IncludeBearerTokenCondition,
-  INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-  includeBearerTokenInterceptor
-} from 'keycloak-angular';
+  HttpInterceptor,
+  HttpRequest,
+  HttpHandler,
+  HttpEvent,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
+  constructor(private router: Router) {}
 
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const token = localStorage.getItem('access_token');
 
-const urlCondition = createInterceptorCondition<IncludeBearerTokenCondition>({
-  urlPattern: /^(http:\/\/localhost:8066)(\/.*)?$/i,
-  bearerPrefix: 'Bearer'
-});
-import { routes } from '../../app-routing.module'
-import { environment } from '../../../environments/environment';
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideKeycloak({
-      config: {
-        url: environment.keycloak.url,
-        realm: environment.keycloak.realm,
-        clientId: environment.keycloak.clientId
-      },
-      initOptions: {
-        onLoad: 'check-sso',
-        silentCheckSsoRedirectUri: window.location.origin + '/silent-check-sso.html'
-      }
-    }),
-    {
-      provide: INCLUDE_BEARER_TOKEN_INTERCEPTOR_CONFIG,
-      useValue: [urlCondition] // <-- Note that multiple conditions might be added.
-    },
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideHttpClient(withInterceptors([includeBearerTokenInterceptor]))
-  ]
-};
+    // Don't attach token for login request
+    if (req.url.includes('/api/auth/login')) {
+      return next.handle(req);
+    }
+
+    let authReq = req;
+
+    if (token) {
+      authReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    }
+
+    return next.handle(authReq).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          // Redirect to login on 401
+          this.router.navigate(['/login']);
+        }
+        return throwError(() => error);
+      })
+    );
+  }
+}

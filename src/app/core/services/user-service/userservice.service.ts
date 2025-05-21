@@ -10,6 +10,6 @@ export class UserserviceService {
   constructor(private http: HttpClient) {}
 
   public getUsers():Observable<any> {
-    return this.http.get('http://localhost:8066/api/users');
+    return this.http.get('http://localhost:8066/api/users/users');
   }
 }

@@ -13,10 +13,23 @@ import { provideRouter } from '@angular/router';
 import { KeycloakAngularModule, KeycloakService } from 'keycloak-angular';
 import { keycloakConfig } from './keycloak-config';
 import { CreationcvComponent } from './shared/pages/candidate/creationcv/creationcv.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListUsersComponent } from './shared/pages/admin/list-users/list-users.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavbarMinComponent } from './shared/navbar-min/navbar-min.component';
+import { AuthInterceptor } from './core/intercepteurs/intercepteur';
+import { PreviewcvComponent } from './shared/pages/candidate/previewcv/previewcv.component';
+import { SidebarComponent } from './shared/sidebar/sidebar.component';
+import { CandidateComponent } from './shared/pages/candidate/candidate.component';
+import { DashboardComponent } from './shared/pages/candidate/dashboard/dashboard.component';
+import { MyApplicationsComponent } from './shared/pages/candidate/my-applications/my-applications.component';
+import { JobOffersComponent } from './shared/pages/candidate/job-offers/job-offers.component';
+import { ChoixTemplateComponent } from './shared/pages/candidate/choix-template/choix-template.component';
+import { ModeleClassicComponent } from './shared/pages/candidate/previewcv/modele-classic/modele-classic.component';
+import { ModeleEtalentlyComponent } from './shared/pages/candidate/previewcv/modele-etalently/modele-etalently.component';
+import { ListCvsComponent } from './shared/pages/candidate/list-cvs/list-cvs.component';
+import { ChoixCreationcvComponent } from './shared/pages/candidate/choix-creationcv/choix-creationcv.component';
+import { TimeAgoPipe } from './shared/pipes/time-ago.pipe';
 
 function initializeKeycloak(keycloak: KeycloakService) {
   return () =>
@@ -35,7 +48,20 @@ function initializeKeycloak(keycloak: KeycloakService) {
     HomeComponent,
     CreationcvComponent,
     ListUsersComponent,
-    NavbarMinComponent
+    NavbarMinComponent,
+    PreviewcvComponent,
+    SidebarComponent,
+    CandidateComponent,
+    DashboardComponent,
+    MyApplicationsComponent,
+    JobOffersComponent,
+    ChoixTemplateComponent,
+    ModeleClassicComponent,
+    ModeleEtalentlyComponent,
+    ListCvsComponent,
+    ChoixCreationcvComponent,
+    TimeAgoPipe,
+ 
   ],
   imports: [
     BrowserModule,
@@ -43,17 +69,16 @@ function initializeKeycloak(keycloak: KeycloakService) {
     KeycloakAngularModule,
     FormsModule,
     HttpClientModule,
-    
+    ReactiveFormsModule
   ],
   providers: [
     provideRouter(routes),
     {
-      provide: APP_INITIALIZER,
-      useFactory: initializeKeycloak,
-      multi: true,
-      deps: [KeycloakService]
+      provide: HTTP_INTERCEPTORS,
+      useClass:AuthInterceptor,
+      multi:true
     },
-    KeycloakService
+    
   ],
   bootstrap: [AppComponent]
 })

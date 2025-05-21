@@ -15,10 +15,10 @@ MoveToCvBuild() {
 }
   
   constructor(private keycloak: KeycloakService) {
-    const isLogged = this.keycloak.isLoggedIn();      
-      console.log('✅ Is logged in:', isLogged);
-      console.log('🔑 Token:', keycloak.getKeycloakInstance().token);
-      console.log('🎭 Roles:', keycloak.getUserRoles());
+    // const isLogged = this.keycloak.isLoggedIn();      
+    //   console.log('✅ Is logged in:', isLogged);
+    //   console.log('🔑 Token:', keycloak.getKeycloakInstance().token);
+    //   console.log('🎭 Roles:', keycloak.getUserRoles());
       
     
   }

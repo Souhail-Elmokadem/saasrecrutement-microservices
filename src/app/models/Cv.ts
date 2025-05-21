@@ -1,26 +1,21 @@
-export interface Cv{
-    firstName: string;
-    lastName: string;
-    email: string;
-    tel: string;
-    gender: string;
-    profession: string;
-    profile: string;
-    competences: string[];
-    centreInterets: string[];
-    experience: Experience[];
-    formations: Formation[];
+import { Education } from "./Educations";
+import { Experience } from "./Experience";
+
+export interface Cv {
+  id:string;
+  fullName: string;
+  email: string;
+  phone: string;
+  cvName:string;
+  linkedin: string;
+  website: string;
+  state: string;
+  title:string;
+  updatedAt:string;
+  country: string;
+  summary: string;
+  skills: string[];
+  experiences: Experience[];
+  educations: Education[];
 }
 
-export interface Experience {
-    title: string;
-    company: string;
-    duration: string;
-    description: string;
-  }
-  
-  export interface Formation {
-    diploma: string;
-    school: string;
-    year: string;
-  }

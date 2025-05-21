@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Experience } from '../../../../models/Experience';
+import { Education } from '../../../../models/Educations';
 import { CvserviceService } from '../../../../core/services/cv-service/cvservice.service';
+import { Cv } from '../../../../models/Cv';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-creationcv',
@@ -7,108 +11,347 @@ import { CvserviceService } from '../../../../core/services/cv-service/cvservice
   standalone:false,
   styleUrls: ['./creationcv.component.css'],
 })
-export class CreationcvComponent {
-  step = 1;
-  image = 'https://placehold.co/300x300/e2e8f0/cccccc?text=Profile';
-  password = '';
-  experience = [{ title: '', company: '', duration: '', description: '' }];
-  gender = 'Male';
-  passwordStrengthText = '';
-  togglePassword = false;
-  competenceInput = '';
-  competences: string[] = [];
-  firstName!:string;
-  lastName!:string;
-  interestInput = '';
-  centreInterets: string[] = [];
-  fullname = '';
-  email = '';
-  tel = '';
-  profession = '';
-  profile = '';
-  formations = [{ diploma: '', school: '', year: '' }];
+export class CreationcvComponent implements OnInit {
+  
+    // Contact Info
+    fullName = '';
+    email = '';
+    phone = '';
+    linkedin = '';
+    website = '';
+    state = '';
+    country = '';
+    summary='';
+    title='';
+    cvidparam:string='';
+    cvName:string='';
+    cv!:Cv;
+  
+  
+    // Experience
+    // experiences: { title: string; company: string; startDate: string; end_date: string; description: string; }[] = [
+    //   { title: '', company: '', startDate: '', endDate: '', description: '' }
+    // ];
+  
+    // Education
+  
+  
 
-  cvJSON: string = '';
+    constructor(private cvservice:CvserviceService,private route:Router,private active:ActivatedRoute){}
+  ngOnInit(): void {
+     this.cvidparam = this.active.snapshot.paramMap.get("id")!;
+     this.cvName = this.active.snapshot.paramMap.get("name")!;
 
-  constructor(private cvservice:CvserviceService){
+     if(this.cvidparam !=''){
+          this.cvservice.getCvById(this.cvidparam).subscribe(
+            {
+              next:(data:any)=>{
+                console.log("after call")
+                this.cv=data;
+                console.log("data")
+                this.populateFormFromCv(this.cv)
+                
+              },
+              error:err=>console.log(err)
+            }
+          )
+     }
 
-  }
-  nextStep() {
-    if (this.step < 5) this.step++;
-  }
-
-  previousStep() {
-    if (this.step > 1) this.step--;
-  }
-
-  completeRegistration() {
-    const cv = {
-      firstName: this.firstName,
-      lastName: this.lastName,
-      email: this.email,
-      tel: this.tel,
-      gender: this.gender,
-      profession: this.profession,
-      profile: this.profile,
-      competences: this.competences,
-      centreInterets: this.centreInterets,
-      experience: this.experience,
-      formations: this.formations,
-    };
-    this.cvJSON = JSON.stringify(cv, null, 2);
-    this.step = 5;
-    console.log(this.cvJSON); // For debugging purposes
+          
     
-    this.cvservice.createCv(cv).subscribe({
-      next: (response) => {
-        console.log('CV enregistré avec succès', response);
-        this.step = 5;
-      },
-      error: (err) => {
-        console.error('Erreur lors de l\'enregistrement', err);
+  }
+  private populateFormFromCv(cv: Cv): void {
+    this.fullName = cv.fullName || '';
+    this.email = cv.email || '';
+    this.phone = cv.phone || '';
+    this.linkedin = cv.linkedin || '';
+    this.website = cv.website || '';
+    this.cvName=cv.cvName || '';
+    this.state = cv.state || '';
+    this.country = cv.country || '';
+    this.summary = cv.summary || '';
+    this.title = cv.title || '';
+    this.skills = Array.isArray(cv.skills) ? cv.skills : [];
+  
+    this.experiences = Array.isArray(cv.experiences) && cv.experiences.length > 0
+    ? cv.experiences.map(exp => ({
+        ...exp,
+        start_date: this.normalizeMonthFormat(exp.start_date),
+        end_date: this.normalizeMonthFormat(exp.end_date)
+      }))
+    : [{
+        title: '',
+        company: '',
+        start_date: '',
+        end_date: '',
+        location: '',
+        description: ''
+      }];
+  this.currentExperienceIndex = 0;
+  
+  this.educations = Array.isArray(cv.educations) && cv.educations.length > 0
+  ? cv.educations.map(edu => ({
+      ...edu,
+      start_date: this.normalizeMonthFormat(edu.start_date),
+      end_date: this.normalizeMonthFormat(edu.end_date)
+    }))
+  : [{
+      school: '',
+      degree: '',
+      branch: '',
+      start_date: '',
+      end_date: ''
+    }];
+this.currentEducationIndex = 0;
+
+  }
+  normalizeMonthFormat(date?: string): string {
+    if (!date) return '';
+    return date.length === 4 ? `${date}-01` : date; // Si "2020" => "2020-01"
+  }
+    sections = [
+      { label: 'Contact', value: 'contact' },
+      { label: 'Experience', value: 'experience' },
+      { label: 'Education', value: 'education' },
+      { label: 'Skills', value: 'skills' },
+      { label: 'Summary', value: 'summary' }
+    ];
+    
+    currentSection: string = 'contact';
+    
+   
+  
+    
+    currentExperienceIndex: number=0;
+    currentEducationIndex: number=0;
+  
+    switchSection(section: string): void {
+      this.currentSection = section;
+    }
+  
+    addExperience(): void {
+      this.experiences.push({
+        title: '',
+        company: '',
+        start_date: '',
+        end_date: '',
+        location: '',
+        description: ''
+      });
+    }
+    addEducation(): void {
+      this.educations.push({
+        school:'',
+        degree:'',
+        branch:'',
+        start_date:'',
+        end_date:''
+      });
+    }
+  
+    selectExperience(index: number): void {
+      this.currentExperienceIndex = index;
+    }
+  
+   
+    
+    experiences: Experience[]=[
+      {
+        title: '',
+        company: '',
+        start_date: '',
+        end_date: '',
+        location: '',
+        description: ''
       }
-    });
-  }
-  reset() {
-    this.step = 1;
-    this.cvJSON = '';
-  }
-  addExperience() {
-    this.experience.push({ title: '', company: '', duration: '', description: '' });
-  }
-  onImageChange(event: any) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => this.image = e.target?.result as string;
-    reader.readAsDataURL(file);
-  }
-  checkPasswordStrength() {
-    const strong = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W_])(?=.{8,})/;
-    const medium = /^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})/;
+    ]; 
+    educations: Education[]=[
+      {
+        school:'',
+        degree:'',
+        branch:'',
+        start_date:'',
+        end_date:'',
+      }
+    ];
+    
+    selectEducation(index: number): void {
+      this.currentEducationIndex = index;
+    }
+  
+    
+    updateExperienceField(field: keyof Experience, value: string): void {
+      this.experiences[this.currentExperienceIndex][field] = value;
+    } 
+    updateEducationField(field: keyof Education, value: string): void {
+      this.educations[this.currentEducationIndex][field] = value;
+    }
+    
+    removeExperience(index: number): void {
+      this.experiences.splice(index, 1);
+    
+      if (this.experiences.length === 0 || this.experiences.length === 1) {
+        this.currentExperienceIndex = -1;
+        return;
+      }
+    
+      if (this.currentExperienceIndex >= this.experiences.length) {
+        this.currentExperienceIndex = this.experiences.length - 1;
+      }
+    }
+    
+    removeEducation(index: number): void {
+      this.educations.splice(index, 1);
+    
+      if (this.educations.length === 0 || this.educations.length === 1) {
+        this.currentExperienceIndex = -1;
+        return;
+      }
+    
+      if (this.currentExperienceIndex >= this.educations.length) {
+        this.currentExperienceIndex = this.educations.length - 1;
+      }
+    }
+  
+  
+    
+  
+    newSkill: string = '';
+skills: string[] = [];
 
-    if (strong.test(this.password)) {
-      this.passwordStrengthText = 'Strong password';
-    } else if (medium.test(this.password)) {
-      this.passwordStrengthText = 'Could be stronger';
-    } else {
-      this.passwordStrengthText = 'Too weak';
-    }
+addSkill() {
+  const trimmed = this.newSkill.trim();
+  if (trimmed && !this.skills.includes(trimmed)) {
+    this.skills.push(trimmed);
   }
-  addCompetence() {
-    if (this.competenceInput) {
-      this.competences.push(this.competenceInput);
-      this.competenceInput = '';
-    }
-  }
-
-  addInterest() {
-    if (this.interestInput) {
-      this.centreInterets.push(this.interestInput);
-      this.interestInput = '';
-    }
-  }
-  addFormation() {
-    this.formations.push({ diploma: '', school: '', year: '' });
-  }
+  this.newSkill = '';
 }
+
+removeSkill(index: number) {
+  this.skills.splice(index, 1);
+}
+
+saveBasicInfo() {
+      console.log('Contact saved', {
+        fullName: this.fullName,
+        email: this.email,
+        phone: this.phone,
+        linkedin: this.linkedin,
+        website: this.website,
+        state: this.state,
+        country: this.country
+      });
+    }
+    exportCv(): void {
+      const cvData = {
+        id:this.cvidparam,
+        fullName: this.fullName,
+        email: this.email,
+        phone: this.phone,
+        cvName:this.cvName,
+        linkedin: this.linkedin,
+        website: this.website,
+        state: this.state,
+        updatedAt:'',
+        title: this.title,
+        country: this.country,
+        summary: this.summary,
+        skills: this.skills,
+        experiences: this.experiences,
+        educations: this.educations
+      };
+    
+      this.cv = cvData;
+    
+    
+      if(this.cvidparam != ''){
+        this.cvservice.updateCv(cvData).subscribe({
+          next:(data:any)=>{
+              console.log("success")
+              console.log(data);
+              this.route.navigateByUrl("/candidate/modele/"+data.cv.id)
+          },
+          error:err=>console.log(err)
+        })
+        console.log("✅ Exported CV Data:", this.cv);
+
+
+      }else{
+        this.cvservice.createCv(cvData).subscribe({
+          next:(data:any)=>{
+              console.log("success")
+              console.log(data);
+              this.route.navigateByUrl("/candidate/modele/"+data.cv.id)
+          },
+          error:err=>console.log(err)
+        })
+        console.log("✅ Exported CV Data:", this.cv);
+      }
+     
+
+      
+      // Optional: trigger download
+      // const blob = new Blob([JSON.stringify(cvData, null, 2)], { type: 'application/json' });
+      // const url = window.URL.createObjectURL(blob);
+      // const a = document.createElement('a');
+      // a.href = url;
+      // a.download = 'cv-export.json';
+      // a.click();
+      // window.URL.revokeObjectURL(url);
+
+     
+    }
+
+
+
+
+
+    fillTestCv(): void {
+      this.fullName = 'Souhail El Idrissi';
+      this.email = 'souhail@gmail.com';
+      this.phone = '+212600000000';
+      this.linkedin = 'https://linkedin.com/in/souhail';
+      this.website = 'https://souhail.dev';
+      this.state = 'Casablanca';
+      this.country = 'Maroc';
+      this.summary = 'Développeur full stack passionné par le backend Java et le frontend Angular.';
+      this.title="developer java junior"
+    
+      this.skills = ['Java', 'Spring Boot', 'Angular', 'Docker'];
+    
+      this.experiences = [
+        {
+          title: 'Développeur Backend',
+          company: 'TechCorp',
+          start_date: '2022-01',
+          end_date: '2023-01',
+          location: 'Rabat',
+          description: 'Création d’API REST sécurisées avec Spring Boot et intégration Kafka.'
+        },
+        {
+          title: 'Développeur frotend',
+          company: 'Google',
+          start_date: '2020-01',
+          end_date: '2022-01',
+          location: 'casablanca',
+          description: 'Création des interfacesécurisées avec angular et tailwind.'
+        }
+      ];
+    
+      this.educations = [
+        {
+          school: 'ENSA',
+          degree: 'Ingénieur',
+          branch: 'Génie Logiciel',
+          start_date: '2019-01',
+          end_date: '2022-01'
+        }
+      ];
+    
+      this.currentExperienceIndex = 0;
+      this.currentEducationIndex = 0;
+    
+      console.log("🎯 CV de test généré");
+    }
+    
+  }

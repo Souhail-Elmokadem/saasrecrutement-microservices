@@ -1,0 +1,8 @@
+aside {
+    transition: width 0.3s ease;
+  }
+  
+  aside .text-sm {
+    transition: opacity 0.3s ease;
+  }
+  

@@ -1,0 +1,74 @@
+<div class="min-h-screen bg-[#0f1123] flex items-center justify-center px-4">
+  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div class="flex flex-col items-center justify-center w-48 h-48 bg-white border border-gray-300 rounded-2xl shadow-lg animate-pulse">
+      <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+      <p class="text-sm text-gray-700 font-medium">Chargement...</p>
+    </div>
+  </div>
+   
+  
+  <div *ngIf="!isLoading" class="bg-[#1a1d34] text-white p-8 rounded-xl shadow-2xl w-full max-w-md border border-[#292c46] transition duration-500 hover:shadow-purple-900">
+     
+     
+      <!-- Header -->
+      <h2 class="text-2xl font-bold mb-4 text-center">Create New Resume</h2>
+      <p class="text-sm text-gray-400 text-center mb-6">Name your resume and choose how to start</p>
+  
+      <!-- Form -->
+      <form>
+        <label class="block mb-2 text-sm font-semibold">Resume Name</label>
+        <input
+          type="text"
+          [(ngModel)]="cvName"
+            name="cvName"
+          placeholder="e.g. Frontend Developer Resume"
+          class="w-full px-4 py-2 mb-6 text-black rounded-md outline-none focus:ring-2 focus:ring-[#a78bfa] focus:border-transparent transition duration-300"
+        />
+ 
+        <!-- Import Options -->
+        <p class="text-sm text-gray-400 mb-2">Start from:</p>
+        <div class="flex flex-col gap-3">
+          <button
+            type="button"
+            class="flex items-center gap-3 px-4 py-2 bg-[#2d304b] hover:bg-[#383c5d] rounded-md transition duration-300 group"
+          >
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" class="w-5 h-5" />
+            <span class="text-sm font-medium text-white group-hover:text-purple-200">Import from LinkedIn</span>
+          </button>
+  
+          <input
+              #fileInput
+              type="file"
+              accept=".pdf,.doc,.docx"
+              class="hidden"
+              (change)="onFileSelected($event)"
+/>
+          <button
+            type="button"
+            (click)="cvName.length>3?fileInput.click():affichernotif()" 
+            
+            class="flex items-center gap-3 px-4 py-2 bg-[#2d304b] hover:bg-[#383c5d] rounded-md transition duration-300 group"
+          >
+            <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" stroke-width="2"
+              viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round"
+                d="M12 4v16m8-8H4" /></svg>
+            <span class="text-sm font-medium text-white group-hover:text-purple-200">Upload Existing CV (PDF/DOC)</span>
+          </button>
+        </div>
+  
+        <!-- Or Create from Scratch -->
+        <div class="text-center my-6">
+          <span class="text-xs text-gray-500 uppercase">OR</span>
+        </div>
+  
+        <button
+        (click)="GoToCreationCv()"
+          type="submit"
+          class="w-full py-2 bg-[#a78bfa] hover:bg-[#c4b5fd] text-[#1a1d34] font-semibold rounded-md transition duration-300 ease-in-out"
+        >
+          Start from Scratch
+        </button>
+      </form>
+    </div>
+  </div>
+  

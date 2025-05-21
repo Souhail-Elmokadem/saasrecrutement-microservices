@@ -9,7 +9,12 @@ module.exports = {
   ]
   ,
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'top-color': '#8e4d57',
+        'heading': '#fcfbfc',
+      }
+    }
   },
   plugins: [],
 }

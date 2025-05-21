@@ -1,224 +1,293 @@
-<app-navbar-min></app-navbar-min>
-<div class="h-10 w-10"></div>
-<div class="h-screen pt-10" *ngIf="step <= 5">
-    <div class="max-w-3xl mx-auto px-4 py-10">
-  
-      <!-- ✅ Final Step (Success message) -->
-      <div *ngIf="step === 5" class="bg-white rounded-lg p-10 flex items-center shadow justify-between">
-        <div class="w-full">
-          <svg class="mb-4 h-20 w-20 text-green-500 mx-auto" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-          </svg>
-          <h2 class="text-2xl mb-4 text-gray-800 text-center font-bold">Registration Success</h2>
-          <div class="text-gray-600 mb-8 text-center">
-            Thank you. We have sent you an email to demoemo.test. Please click the link in the message to activate your account.
-          </div>
-          <button (click)="reset()" class="w-40 block mx-auto py-2 px-5 rounded-lg shadow-sm text-gray-600 bg-white hover:bg-gray-100 font-medium border">
-            Back to home
-          </button>
-        </div>
-      </div>
-  
-      <!-- ✅ Steps Form -->
-      <div *ngIf="step < 5">
-        <!-- Step Indicator -->
-        <div class="border-b-2 py-4">
-          <div class="uppercase tracking-wide text-xs font-bold text-gray-500 mb-1 leading-tight">
-            Step: {{ step }} of 4
-          </div>
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-            <div class="flex-1">
-              <div *ngIf="step === 1" class="text-lg font-bold text-gray-700 leading-tight">Your Profile</div>
-              <div *ngIf="step === 2" class="text-lg font-bold text-gray-700 leading-tight">Your Password</div>
-              <div *ngIf="step === 3" class="text-lg font-bold text-gray-700 leading-tight">Tell me about yourself</div>
-              <div *ngIf="step === 4" class="text-lg font-bold text-gray-700 leading-tight">Experience</div>
 
-            </div>
-            <div class="flex items-center md:w-64">
-              <div class="w-full bg-white rounded-full mr-2">
-                <div class="rounded-full bg-green-500 h-2 text-center text-white"
-                     [style.width.%]="(step / 4) * 100"></div>
-              </div>
-              <div class="text-xs w-10 text-gray-600">{{ (step / 4 * 100) | number: '1.0-0' }}%</div>
-            </div>
+  <div class="min-h-screen bg-[#12172A] text-white font-sans">
+      <!-- Navigation -->
+      <nav class="flex items-center justify-between max-w-6xl mx-auto px-4 py-2 border-b border-[#2B2E45]">
+        <!-- Left group (Dropdown + Tabs) -->
+        <div class="flex items-center gap-4">
+          <!-- Dropdown -->
+          <div class="border border-[#44476A] rounded-md px-3 py-1 text-sm text-white">
+            JHBUYHJG
+            <span class="ml-1">▼</span>
           </div>
-        </div>
-  
-        <!-- Step Content -->
-        <div class="py-10">
-  
-          <!-- Step 1: Profile -->
-          <div *ngIf="step === 1">
-            <div class="mb-5 text-center">
-              <div class="mx-auto w-32 h-32 mb-4 border rounded-full relative bg-gray-100 shadow-inset">
-                <img class="object-cover w-full h-32 rounded-full" [src]="image" />
-              </div>
-  
-              <label for="fileInput" class="cursor-pointer inline-flex items-center py-2 px-4 rounded-lg shadow-sm text-gray-600 bg-white hover:bg-gray-100 font-medium border">
-                <svg class="w-6 h-6 mr-1" fill="none" stroke="currentColor" stroke-width="2"
-                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 7h1a2 2 0 002-2 1 1 0 011-1h6a1 1 0 011 1 2 2 0 002 2h1a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2z" />
-                  <circle cx="12" cy="13" r="3" />
-                </svg>
-                Browse Photo
-              </label>
-  
-              <input id="fileInput" type="file" accept="image/*" hidden (change)="onImageChange($event)" />
-              <div class="text-xs text-gray-500 text-center mt-1">Click to add profile picture</div>
-            </div>
-  
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">first Complete</label>
-              <input type="text" [(ngModel)]="firstName" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                     placeholder="Enter your firstname...">
-            </div>
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">last Complete</label>
-              <input type="text" [(ngModel)]="lastName" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                     placeholder="Enter your firstname...">
-            </div>
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">Email</label>
-              <input type="email" [(ngModel)]="email" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                     placeholder="Enter your email address...">
-            </div>
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">Tel</label>
-              <input type="email"  [(ngModel)]="tel" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                     placeholder="212 6 00 0000 000">
-            </div>
-          </div>
-  
-          <!-- Step 2: Password -->
-          <div *ngIf="step === 2">
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">Set up password</label>
-              <div class="text-gray-600 mt-2 mb-4">
-                <ul class="list-disc text-sm ml-4 mt-2">
-                  <li>lowercase letters</li>
-                  <li>numbers</li>
-                  <li>capital letters</li>
-                  <li>special characters</li>
-                </ul>
-              </div>
-  
-              <div class="relative">
-                <input [type]="togglePassword ? 'text' : 'password'"
-                       [(ngModel)]="password"
-                       (keydown)="checkPasswordStrength()"
-                       class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                       placeholder="Your strong password...">
-                <div class="absolute right-0 top-0 px-3 py-3 cursor-pointer" (click)="togglePassword = !togglePassword">
-                  <svg *ngIf="togglePassword" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 5c-7.633 0-9.927 6.617-9.948 6.684L1.946 12l.106.316C2.073 12.383 4.367 19 12 19s9.927-6.617 9.948-6.684L22.054 12l-.106-.316C21.927 11.617 19.633 5 12 5z" />
-                  </svg>
-                  <svg *ngIf="!togglePassword" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                </div>
-              </div>
-  
-              <div class="flex items-center mt-4 h-3">
-                <div class="w-2/3 flex justify-between h-2">
-                  <div class="h-2 rounded-full mr-1 w-1/3"
-                       [ngClass]="{'bg-red-400': passwordStrengthText === 'Too weak' || passwordStrengthText === 'Could be stronger' || passwordStrengthText === 'Strong password'}">
-                  </div>
-                  <div class="h-2 rounded-full mr-1 w-1/3"
-                       [ngClass]="{'bg-orange-400': passwordStrengthText === 'Could be stronger' || passwordStrengthText === 'Strong password'}">
-                  </div>
-                  <div class="h-2 rounded-full w-1/3"
-                       [ngClass]="{'bg-green-400': passwordStrengthText === 'Strong password'}">
-                  </div>
-                </div>
-                <div class="text-gray-500 font-medium text-sm ml-3">{{ passwordStrengthText }}</div>
-              </div>
-            </div>
-          </div>
-  
-          <!-- Step 3: Personal info -->
-          <div *ngIf="step === 3">
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">Gender</label>
-              <div class="flex">
-                <label class="flex items-center bg-white px-4 py-3 shadow-sm mr-4 rounded-lg">
-                  <input type="radio" [(ngModel)]="gender" value="Male" class="form-radio mr-2" /> Male
-                </label>
-                <label class="flex items-center bg-white px-4 py-3 shadow-sm rounded-lg">
-                  <input type="radio" [(ngModel)]="gender" value="Female" class="form-radio mr-2" /> Female
-                </label>
-              </div>
-            </div>
-  
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">Profession</label>
-              <input type="text" [(ngModel)]="profession" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                     placeholder="e.g. Web Developer">
-            </div>
-            <div class="mb-5">
-              <label class="font-bold mb-1 text-gray-700 block">Profile</label>
-              <input type="text" [(ngModel)]="profile" class="w-full px-4 py-3 rounded-lg shadow-sm text-gray-600 font-medium"
-                     placeholder="Profile ex. etre motive fullstack developper ...">
-            </div>
-            <input [(ngModel)]="competenceInput" class="w-full p-2 mb-4 border rounded" placeholder="Add Competence">
-        <button (click)="addCompetence()" class="mb-4 underline">+ Add Competence</button>
-        <ul>
-          <li *ngFor="let comp of competences">{{ comp }}</li>
-        </ul>
-            <input [(ngModel)]="interestInput" class="w-full p-2 mb-4 border rounded" placeholder="Add Interest">
-        <button (click)="addInterest()" class="mb-4 underline">+ Add Interest</button>
-        <ul>
-          <li *ngFor="let interest of centreInterets">{{ interest }}</li>
-        </ul>
-           
-          </div>
-          <div *ngIf="step === 4">
-            <div *ngFor="let exp of experience; let i = index" class="mb-4 border p-4 rounded">
-              <input [(ngModel)]="exp.title" class="w-full p-2 mb-2 border rounded" placeholder="Title">
-              <input [(ngModel)]="exp.company" class="w-full p-2 mb-2 border rounded" placeholder="Company">
-              <input [(ngModel)]="exp.duration" class="w-full p-2 mb-2 border rounded" placeholder="Duration">
-              <textarea [(ngModel)]="exp.description" class="w-full p-2 border rounded" placeholder="Description"></textarea>
-            </div>
-            <button (click)="addExperience()" class="underline">+ Add Experience</button>
-
-
-            <h3 class="font-bold mt-4">Formations</h3>
-            <div *ngFor="let form of formations; let i = index" class="mb-4">
-              <input [(ngModel)]="form.diploma" class="w-full p-2 mb-2 border rounded" placeholder="Diploma">
-              <input [(ngModel)]="form.school" class="w-full p-2 mb-2 border rounded" placeholder="School">
-              <input [(ngModel)]="form.year" class="w-full p-2 border rounded" placeholder="Year">
-            </div>
-            <button (click)="addFormation()" class="underline">+ Add Formation</button>
-          </div>
-    
-          </div>
-    
-  
-        <!-- Bottom Navigation -->
-        <div class="fixed bottom-0 left-0 right-0 py-5 bg-white shadow-md">
-          <div class="max-w-3xl mx-auto px-4 flex justify-between">
-            <button *ngIf="step > 1"
-                    (click)="previousStep()"
-                    class="w-32 py-2 px-5 rounded-lg shadow-sm text-gray-600 bg-white hover:bg-gray-100 font-medium border">
-              Previous
+                                
+          <!-- Tabs -->
+          <div class="flex items-center gap-1 border border-[#44476A] rounded-md px-1 py-1">
+            <button
+              *ngFor="let section of sections"
+              (click)="switchSection(section.value)"
+              [ngClass]="{
+                'bg-[#8B5CF6] text-white font-bold': currentSection === section.value,
+                'text-white hover:bg-[#2B2E45]': currentSection !== section.value
+              }"
+              class="px-3 py-1 text-xs rounded-md uppercase tracking-wide transition-colors"
+            >
+              {{ section.label }}
             </button>
-  
-            <div class="text-right">
-              <button *ngIf="step < 4"
-                      (click)="nextStep()"
-                      class="w-32 py-2 px-5 rounded-lg shadow-sm text-white bg-blue-500 hover:bg-blue-600 font-medium">
-                Next
-              </button>
-  
-              <button *ngIf="step === 4"
-                      (click)="completeRegistration()"
-                      class="w-32 py-2 px-5 rounded-lg shadow-sm text-white bg-blue-500 hover:bg-blue-600 font-medium">
-                Complete
-              </button>
-            </div>
           </div>
         </div>
+    
+        <!-- Right group -->
+        <div class="flex items-center gap-2 border border-[#44476A] rounded-md px-2 py-1 text-xs text-white font-semibold">
+          <button class="hover:text-[#8B5CF6]" (click)="exportCv()">FINISH UP & PREVIEW</button>
+          <span>|</span>
+          <button class="hover:text-[#8B5CF6]">AI COVER LETTER</button>
+        </div>
+      </nav>
+    
+      <!-- Content Sections -->
+      <div class="max-w-6xl mx-auto px-4">
+        <button (click)="fillTestCv()" class="px-4 py-1 rounded-xl bg-green-600 hover:bg-green-700 transition text-xs ml-2">
+          Remplir Test CV
+        </button>
+        
+        <!-- Contact Section -->
+        <section *ngIf="currentSection === 'contact'" class="py-10 transition-all duration-300 ease-in-out">
+          <div class="bg-[#1E2338] p-8 rounded-2xl shadow-lg border border-[#2B2E45]">
+
+            <div class="col-span-full">
+              <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Cover photo</label>
+              <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                <div class="text-center">
+                  <svg class="mx-auto size-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-slot="icon">
+                    <path fill-rule="evenodd" d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6ZM3 16.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z" clip-rule="evenodd" />
+                  </svg>
+                  <div class="mt-4 flex text-sm/6 text-gray-600">
+                    <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
+                      <span>Upload a file</span>
+                      <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                    </label>
+                    <p class="pl-1">or drag and drop</p>
+                  </div>
+                  <p class="text-xs/5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                </div>
+              </div>
+            </div>
+      
+
+            <div class="grid grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm mb-1">FULL NAME</label>
+                <input [(ngModel)]="fullName" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="Full Name">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">EMAIL ADDRESS</label>
+                <input [(ngModel)]="email" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="Email">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">PHONE NUMBER</label>
+                <input [(ngModel)]="phone" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="Phone">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">LINKEDIN URL</label>
+                <input [(ngModel)]="linkedin" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="https://linkedin.com/in/username">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">PERSONAL WEBSITE</label>
+                <input [(ngModel)]="website" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="https://yourwebsite.com">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">Title</label>
+                <input [(ngModel)]="title" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="votre profile">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">COUNTRY</label>
+                <input [(ngModel)]="country" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="Country">
+              </div>
+              <div>
+                <label class="block text-sm mb-1">STATE</label>
+                <input [(ngModel)]="state" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="State">
+              </div>
+            </div>
+            <div class="mt-6 text-right">
+              <button class="px-6 py-2 rounded-xl bg-[#8B5CF6] hover:bg-[#7c3aed] transition">SAVE BASIC INFO</button>
+            </div>
+          </div>
+        </section>
+    
+        <!-- Experience Section -->
+        <div class="max-w-6xl mx-auto px-4">
+  
+          
+          <!-- Experience Section with Sidebar -->
+          <section *ngIf="currentSection === 'experience'" class="py-10 max-w-6xl mx-auto px-4">
+              <div class="flex gap-6">
+          
+                <!-- Left Sidebar -->
+                <div class="w-64">
+                  <div class="bg-[#1E2338] rounded-2xl border border-[#2B2E45] shadow-lg p-4 space-y-4">
+                    <div class="text-center border-b border-[#2B2E45] pb-4">
+                      <div class="text-2xl font-bold text-[#8B5CF6]">0</div>
+                      <div class="text-xs text-[#B0B3C7]">Your Rezi Score</div>
+                      <div class="text-[11px] text-[#999CA7]">Needs improvement</div>
+                    </div>
+          
+                    <div>
+                      <div class="flex justify-between items-center text-sm font-medium text-white mb-2">
+                        <span>Your Experience</span>
+                        <button (click)="addExperience()" class="bg-[#2B2E45] p-1 rounded">+</button>
+                      </div>
+                      <div class="space-y-2">
+                          <div *ngFor="let exp of experiences; let i = index" class="flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer"
+                          [ngClass]="{
+                            'bg-[#8B5CF6]': currentExperienceIndex === i,
+                            'bg-[#282D45] hover:bg-[#3c4160]': currentExperienceIndex !== i
+                          }">
+                       <div (click)="selectExperience(i)" class="flex-1">
+                         <div class="text-sm font-medium">Experience {{ i + 1 }} </div>
+                         <div class="text-xs text-[#B0B3C7]">{{exp.title?exp.title:'details'}}</div>
+                       </div>
+                       <button (click)="removeExperience(i)" class="ml-2 text-sm text-[#ccc] hover:text-red-400">🗑️</button>
+                     </div>
+                     
+                      </div>
+                    </div>
+                  </div>
+                </div>
+          
+                <!-- Experience Form -->
+                <div class="flex-1">
+                  <div class="bg-[#1E2338] p-8 rounded-2xl shadow-lg border border-[#2B2E45]">
+                    <h2 class="text-xl font-semibold mb-6">Experience {{ currentExperienceIndex + 1 }}</h2>
+                    <div class="grid grid-cols-2 gap-6" *ngIf="experiences[currentExperienceIndex] as exp">
+                      <div class="col-span-2">
+                        <label class="block text-sm mb-1">Role</label>
+                        <input [(ngModel)]="experiences[currentExperienceIndex].title" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="e.g. Software Developer">
+                      </div>
+                      <div class="col-span-2">
+                        <label class="block text-sm mb-1">Company</label>
+                        <input [(ngModel)]="experiences[currentExperienceIndex].company" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="e.g. Google">
+                      </div>
+                      <div>
+                        <label class="block text-sm mb-1">Start Date</label>
+                        <input type="month" [(ngModel)]="experiences[currentExperienceIndex].start_date" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl">
+                      </div>
+                      <div>
+                        <label class="block text-sm mb-1">End Date</label>
+                        <input type="month" [(ngModel)]="experiences[currentExperienceIndex].end_date" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl">
+                      </div>
+                      <div class="col-span-2">
+                        <label class="block text-sm mb-1">Location</label>
+                        <input [(ngModel)]="experiences[currentExperienceIndex].location" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="e.g. Paris, France">
+                      </div>
+                      <div class="col-span-2">
+                        <label class="block text-sm mb-1">Description</label>
+                        <textarea rows="4" [(ngModel)]="experiences[currentExperienceIndex].description" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="What were your responsibilities or achievements?"></textarea>
+                      </div>
+                    </div>
+                    <div class="mt-6 text-right">
+                      <button (click)="addExperience()" class="px-6 py-2 rounded-xl bg-[#8B5CF6] hover:bg-[#7c3aed] transition">SAVE TO EXPERIENCE LIST</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+        </div>
+        
+    
+        <!-- Education Section -->
+        <section *ngIf="currentSection === 'education'" class="py-10 transition-all duration-300 ease-in-out">
+          <div class="flex gap-6">
+          
+              <!-- Left Sidebar -->
+              <div class="w-64">
+                <div class="bg-[#1E2338] rounded-2xl border border-[#2B2E45] shadow-lg p-4 space-y-4">
+                  <div class="text-center border-b border-[#2B2E45] pb-4">
+                    <div class="text-2xl font-bold text-[#8B5CF6]">0</div>
+                    <div class="text-xs text-[#B0B3C7]">Your Rezi Score</div>
+                    <div class="text-[11px] text-[#999CA7]">Needs improvement</div>
+                  </div>
+        
+                  <div>
+                    <div class="flex justify-between items-center text-sm font-medium text-white mb-2">
+                      <span>Your Experience</span>
+                      <button (click)="addEducation()" class="bg-[#2B2E45] p-1 rounded">+</button>
+                    </div>
+                    <div class="space-y-2">
+                        <div *ngFor="let edc of educations; let i = index" class="flex justify-between items-center px-3 py-2 rounded-lg cursor-pointer"
+                        [ngClass]="{
+                          'bg-[#8B5CF6]': currentEducationIndex === i,
+                          'bg-[#282D45] hover:bg-[#3c4160]': currentEducationIndex !== i
+                        }">
+                     <div (click)="selectEducation(i)" class="flex-1">
+                       <div class="text-sm font-medium">Education {{ i + 1 }} </div>
+                       <div class="text-xs text-[#B0B3C7]">{{edc.school?edc.school:'details'}}</div>
+                     </div>
+                     <button (click)="removeEducation(i)" class="ml-2 text-sm text-[#ccc] hover:text-red-400">🗑️</button>
+                   </div>
+                   
+                    </div>
+                  </div>
+                </div>
+              </div>
+        
+              <!-- Experience Form -->
+              <div class="flex-1">
+                <div class="bg-[#1E2338] p-8 rounded-2xl shadow-lg border border-[#2B2E45]">
+                  <h2 class="text-xl font-semibold mb-6">Education {{ currentEducationIndex + 1 }}</h2>
+                  <div class="grid grid-cols-2 gap-6" *ngIf="educations[currentExperienceIndex] as edc">
+                    <div class="col-span-2">
+                      <label class="block text-sm mb-1">School</label>
+                      <input [(ngModel)]="educations[currentEducationIndex].school" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="e.g. Software Developer">
+                    </div>
+                    <div class="col-span-2">
+                      <label class="block text-sm mb-1">degree</label>
+                      <input [(ngModel)]="educations[currentEducationIndex].degree" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="e.g. Google">
+                    </div>
+                    <div class="col-span-2">
+                      <label class="block text-sm mb-1">Branch</label>
+                      <input [(ngModel)]="educations[currentEducationIndex].branch" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="e.g. Google">
+                    </div>
+                    <div>
+                      <label class="block text-sm mb-1">Start Date</label>
+                      <input type="month" [(ngModel)]="educations[currentEducationIndex].start_date" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl">
+                    </div>
+                    <div>
+                      <label class="block text-sm mb-1">End Date</label>
+                      <input type="month" [(ngModel)]="educations[currentEducationIndex].end_date" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl">
+                    </div>
+            
+                  </div>
+                  <div class="mt-6 text-right">
+                    <button (click)="addEducation()" class="px-6 py-2 rounded-xl bg-[#8B5CF6] hover:bg-[#7c3aed] transition">SAVE TO Education LIST</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+        </section>
+    
+        <!-- Skills Section -->
+        <section *ngIf="currentSection === 'skills'" class="py-10 transition-all duration-300 ease-in-out">
+          <div class="bg-[#1E2338] p-8 rounded-2xl shadow-lg border border-[#2B2E45]">
+            <label class="block text-sm mb-2">SKILLS</label>
+        
+            <input
+              type="text"
+              [(ngModel)]="newSkill"
+              (keydown.enter)="addSkill()"
+              class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl mb-4"
+              placeholder="Press Enter to add skill (e.g. Angular)"
+            />
+
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span *ngFor="let skill of skills; let i = index"
+                    class="bg-[#8B5CF6] text-white px-3 py-1 rounded-full text-sm flex items-center gap-1 animate-fadeIn">
+                {{ skill }}
+                <button (click)="removeSkill(i)" class="text-white hover:text-red-300">✕</button>
+              </span>
+            </div>
+        
+            
+          </div>
+        </section>
+        
+    
+        <!-- Summary Section -->
+        <section *ngIf="currentSection === 'summary'" class="py-10 transition-all duration-300 ease-in-out">
+          <div class="bg-[#1E2338] p-8 rounded-2xl shadow-lg border border-[#2B2E45]">
+            <label class="block text-sm mb-2">SUMMARY</label>
+            <textarea [(ngModel)]="summary" rows="5" class="w-full bg-[#12172A] border border-[#2B2E45] px-4 py-2 rounded-xl" placeholder="Write a short professional summary"></textarea>
+          </div>
+        </section>
       </div>
-  
     </div>
-  </div>
-  

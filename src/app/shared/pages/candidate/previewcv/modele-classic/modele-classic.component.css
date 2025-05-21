@@ -1,0 +1,7 @@
+@media print {
+    #cv-to-export {
+      border: none !important;
+      border-radius: 0 !important;
+    }
+  }
+  

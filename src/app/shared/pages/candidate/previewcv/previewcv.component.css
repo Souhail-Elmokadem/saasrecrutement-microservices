@@ -1,0 +1,3 @@
+.input-style {
+    @apply w-full px-4 py-2 rounded-xl bg-[#2a284e] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-400;
+  }
