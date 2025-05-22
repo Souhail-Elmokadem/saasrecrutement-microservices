@@ -47,7 +47,7 @@ affichernotif() {
     this.cvservice.createcvfromlocal(formData).subscribe({
       next:(data)=>{
           console.log(data)
-          this.cvId=data.body.cv.id
+          this.cvId=data.cv.id
           
           this.route.navigateByUrl('candidate/cv/uploaded/'+this.cvId)
         this.isLoading=false

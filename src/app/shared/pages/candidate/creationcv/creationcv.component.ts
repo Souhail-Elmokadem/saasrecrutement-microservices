@@ -111,6 +111,34 @@ this.currentEducationIndex = 0;
     return date.length === 4 ? `${date}-01` : date; // Si "2020" => "2020-01"
   }
   
+
+
+photoFile?: File;
+photoPreview: string | ArrayBuffer | null = null;
+
+onPhotoSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  const file = input?.files?.[0];
+  if (!file) return;
+
+  // Option : tu peux vérifier le type et la taille ici
+  if (!file.type.startsWith('image/')) {
+    alert('Merci de choisir une image.');
+    return;
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    alert('Image trop volumineuse (max 2 Mo).');
+    return;
+  }
+
+  this.photoFile = file;
+  // Générer un aperçu
+  const reader = new FileReader();
+  reader.onload = e => {
+    this.photoPreview = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
     sections = [
       { label: 'Contact', value: 'contact' },
       { label: 'Experience', value: 'experience' },
@@ -265,8 +293,10 @@ saveBasicInfo() {
     
       this.cv = cvData;
     
+
+      console.log(this.cvidparam)
     
-      if(this.cvidparam != ''){
+      if(this.cvidparam != null){
         this.cvservice.updateCv(cvData).subscribe({
           next:(data:any)=>{
               console.log("success")
@@ -279,7 +309,7 @@ saveBasicInfo() {
 
 
       }else{
-        this.cvservice.createCv(cvData).subscribe({
+        this.cvservice.createCv(cvData,this.photoFile!).subscribe({
           next:(data:any)=>{
               console.log("success")
               console.log(data);

@@ -22,8 +22,11 @@ export class CvserviceService {
         return this.http.post<any>(`${this.apiUrl}/uploadcvfile`, formData);
       }
 
-  createCv(Cv: Cv): Observable<Cv> {
-    return this.http.post<Cv>(`${this.apiUrl}/create`, Cv);
+  createCv(cv: Cv,photo:File):Observable<Cv> {
+    const formData = new FormData();
+    formData.append('photo', photo);
+    formData.append('cv', new Blob([JSON.stringify(cv)], {type: 'application/json'}));
+    return this.http.post<Cv>(`${this.apiUrl}/create`, formData);
   }
   updateCv(Cv: Cv): Observable<Cv> {
     return this.http.post<Cv>(`${this.apiUrl}/update`, Cv);
