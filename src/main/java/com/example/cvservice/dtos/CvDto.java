@@ -13,11 +13,14 @@ import java.util.List;
 @Getter
 @Setter
 public class CvDto {
-    private Long id;
+    private String id;
     private String fullName;
     private String email;
     private String tel;
     private String country;
+    private String photoUrl;
+    private String title;
+    private String cvName;
     private String gender;
     private String phone;
     private String state;

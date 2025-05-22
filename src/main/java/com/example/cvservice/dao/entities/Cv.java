@@ -25,6 +25,7 @@ public class Cv {
     private String fullName;
     private String email;
     private String tel;
+    private String photoUrl;
     private String title;
     private String country;
     private String gender;

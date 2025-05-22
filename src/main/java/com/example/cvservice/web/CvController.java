@@ -1,5 +1,6 @@
 package com.example.cvservice.web;
 
+import com.example.cvservice.common.services.CommonService;
 import com.example.cvservice.dtos.CvDto;
 import com.example.cvservice.mappers.CvMapper;
 import org.springframework.core.io.FileSystemResource;
@@ -11,7 +12,6 @@ import com.example.cvservice.dao.entities.Cv;
 import com.example.cvservice.services.CvService;
 import com.example.cvservice.services.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -32,13 +32,10 @@ public class CvController {
     private CvService cvService;
 
     @Autowired
-    private PdfService pdfService;
+    private CommonService commonService;
 
-    @Autowired
-    private CvMapper cvMapper;
 
-    @Autowired
-    private RestTemplate restTemplate;
+
     @GetMapping
     public  ResponseEntity<?> listCvs(){
         return new ResponseEntity<>(cvService.getAllCvs(), HttpStatus.OK);
@@ -46,15 +43,16 @@ public class CvController {
 
     @PostMapping("/create")
     @PreAuthorize("hasAuthority('CANDIDAT')")
-    public ResponseEntity<?> createCv(@RequestBody Cv cv,Authentication authentication) {
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-        System.out.printf(jwt.getSubject());
-        System.out.printf("+++++++++++++++++++++++");
-        cv.setUserId(jwt.getSubject());
-        Cv savedCv = cvService.saveCv(cv);
+    public ResponseEntity<?> createCv(        @RequestPart("cv") CvDto cvDto,
+                                              @RequestPart(value = "photo", required = false) MultipartFile photoFile,
+                                              Authentication authentication) {
+
+        String userid = commonService.getIdCvFromAuthentification(authentication);
+        CvDto savedCv = cvService.saveCv(cvDto,userid,photoFile);
         //String pdfPath = pdfService.generateCvPdf(savedCv);
         return ResponseEntity.ok(Map.of("cv", savedCv));
     }
+
 
     @PostMapping("/update")
     @PreAuthorize("hasAuthority('CANDIDAT')")
@@ -84,21 +82,8 @@ public class CvController {
 
     @PostMapping("/uploadcvfile")
     public ResponseEntity<?> uploadCv(@RequestParam("file") MultipartFile file,@RequestParam("cvName") String cvName,Authentication authentication) throws IOException {
-        Path tempFile = Files.createTempFile("cv_", ".pdf");
-        file.transferTo(tempFile.toFile());
-        // Préparer les headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        // Corps de la requête
-        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
-        body.add("file", new FileSystemResource(tempFile));
-        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
-        // Appel au service Python
-        CvDto response = restTemplate.postForObject("http://127.0.0.1:8000/analyze", requestEntity, CvDto.class);
-//        createCv(,authentication);
-        Cv cv = cvMapper.toCv(response);
-        cv.setCvName(cvName);
-        return ResponseEntity.ok(createCv(cv,authentication));
+        Cv saved = cvService.createcvfromCvfile(file,cvName,authentication);
+        return ResponseEntity.ok(Map.of("cv", saved));
     }
 
 
