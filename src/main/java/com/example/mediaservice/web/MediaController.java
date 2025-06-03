@@ -23,6 +23,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/storages/media")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 public class MediaController {
 
 
