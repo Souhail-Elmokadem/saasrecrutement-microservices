@@ -2,12 +2,14 @@ package com.example.cvservice.RestRepositories;
 
 import com.example.cvservice.dao.entities.Cv;
 import com.example.cvservice.dtos.CvDto;
+import com.example.cvservice.dtos.LetterResponseAi;
 import com.example.cvservice.mappers.CvMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.security.authorization.method.AuthorizeReturnObject;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -48,5 +50,37 @@ public class AiServiceImpl implements AiService{
         System.out.printf("etape cv gnerated from ai");
 
         return response;
+    }
+
+    @Override
+    public LetterResponseAi genererLettreDepuisCv(CvDto cvDto) throws JsonProcessingException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+//        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+//        body.add("cv", cvDto);
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        cvDto.getExperiences().removeIf(exp -> exp.getTitle() == null || exp.getTitle().isBlank());
+
+        System.out.printf("avent d'envoi +++++++++++++++++++++++++++");
+        HttpEntity<CvDto> requestEntity = new HttpEntity<>(cvDto, headers);
+
+        ResponseEntity<LetterResponseAi> response = restTemplate.exchange(
+                "http://127.0.0.1:8000/genererLetter",
+                HttpMethod.POST,
+                requestEntity,
+                LetterResponseAi.class
+        );
+
+        // Vérification et retour du contenu
+        LetterResponseAi letter = response.getBody();
+        if (letter == null || letter.getContent() == null) {
+            throw new IllegalArgumentException("Lettre générée vide ou invalide");
+        }
+
+        return letter;
+
     }
 }

@@ -34,7 +34,8 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf().disable();
                 http.authorizeHttpRequests(a->a.requestMatchers("/h2-console").permitAll());
-                http.authorizeHttpRequests(auth->auth.anyRequest().authenticated())
+                http.authorizeHttpRequests(authz -> authz.requestMatchers("/actuator/health").permitAll());
+        http.authorizeHttpRequests(auth->auth.anyRequest().authenticated())
                 .oauth2ResourceServer(outh->outh.jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(jwtAuthConverter)));
 
 

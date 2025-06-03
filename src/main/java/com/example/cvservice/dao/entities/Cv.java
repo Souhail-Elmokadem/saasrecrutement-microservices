@@ -28,6 +28,7 @@ public class Cv {
     private String photoUrl;
     private String title;
     private String country;
+    private String modeleName;
     private String gender;
     private String phone;
     private String state;
@@ -40,14 +41,20 @@ public class Cv {
     @Column(length = 1024)
     private String summary;
     @ElementCollection
+    @Nullable
     private List<String> skills;
     @OneToMany
+    @Nullable
     private List<Experience> experiences;
     @OneToMany
+    @Nullable
     private List<Education> educations;
 
     @Column(name = "created_at")
     private Date createdAt;
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @OneToMany(mappedBy = "cv")
+    List<Letter> letters;
 }

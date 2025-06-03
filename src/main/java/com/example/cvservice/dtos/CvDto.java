@@ -21,6 +21,7 @@ public class CvDto {
     private String photoUrl;
     private String title;
     private String cvName;
+    private String modeleName;
     private String gender;
     private String phone;
     private String state;

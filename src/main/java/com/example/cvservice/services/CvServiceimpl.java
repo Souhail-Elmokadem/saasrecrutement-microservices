@@ -7,24 +7,24 @@ import com.example.cvservice.common.services.CommonService;
 import com.example.cvservice.dao.entities.Cv;
 import com.example.cvservice.dao.entities.Experience;
 import com.example.cvservice.dao.entities.Education;
+import com.example.cvservice.dao.entities.Letter;
 import com.example.cvservice.dao.repositories.CvRepository;
 import com.example.cvservice.dao.repositories.ExperienceRepository;
 import com.example.cvservice.dao.repositories.FormationRepository;
+import com.example.cvservice.dao.repositories.LetterRepository;
 import com.example.cvservice.dtos.CvDto;
 import com.example.cvservice.mappers.CvMapper;
 import com.example.cvservice.models.AppUser;
 import com.example.cvservice.models.MediaRest;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -54,6 +54,9 @@ public  class CvServiceimpl implements CvService {
     private MediaService mediaService;
 
     @Autowired
+    private LetterRepository letterRepository;
+
+    @Autowired
     private CvMapper cvMapper;
     @Override
     public List<Cv> getAllCvs() {
@@ -61,17 +64,18 @@ public  class CvServiceimpl implements CvService {
     }
 
     @Override
-    public Cv getCvById(String id) {
-        return cvRepository.findById(id).get();
+    public CvDto getCvById(String id) {
+        return cvMapper.toCvDto(cvRepository.findById(id).get());
     }
 
     @Override
-    public List<Cv> getCvByUserId(String userId) {
-        return cvRepository.findCvByUserId(userId);
+    public Page<CvDto> getCvByUserId(String userId, int page, int size) {
+        Page<Cv> cvs = cvRepository.findCvByUserId(userId, PageRequest.of(page,size));
+        return cvs.map(cv -> cvMapper.toCvDto(cv));
     }
 
     @Override
-    public Cv saveCv(Cv cv) {
+    public CvDto saveCv(Cv cv) {
 
         try {
 
@@ -91,7 +95,7 @@ public  class CvServiceimpl implements CvService {
         cv.setId(UUID.randomUUID().toString());
         cv.setCreatedAt(new java.util.Date());
         cv.setUpdatedAt(new java.util.Date());
-        return cvRepository.save(cv);
+        return cvMapper.toCvDto(cvRepository.save(cv));
     }
 
     @Override
@@ -102,29 +106,30 @@ public  class CvServiceimpl implements CvService {
             MediaRest  media = mediaService.uploadFile(photoFile,userId);
             cv1.setPhotoUrl(media.getPublicPath());
         }
-        return cvMapper.toCvDto(saveCv(cv1));
+        return cvMapper.toCvDto(cvMapper.toCv(saveCv(cv1)));
     }
 
     @Override
-    public Cv updateCv(Cv cv) {
+    public CvDto updateCv(CvDto cv,String userId,MultipartFile photoFile) {
 
 
         try {
 
             System.out.printf("etape 1");
-            AppUser appUser = userService.getUserById(cv.getUserId()).getBody(); // type responseEntity
+            AppUser appUser = userService.getUserById(userId).getBody();// type responseEntity
             assert appUser != null;
-
-
-
-            cv.setAppUser(appUser);
 
 
         } catch (Exception e) {
             throw new RuntimeException("Invalid user. Unable to save CV. Details: " + e.getMessage());
         }
         System.out.printf("etape 2");
+
         Cv cvexist = cvRepository.findById(cv.getId()).orElseThrow(()->new RuntimeException("Not Found"));
+        if(photoFile!=null){
+            MediaRest  media = mediaService.uploadFile(photoFile,userId);
+            cvexist.setPhotoUrl(media.getPublicPath());
+        }
         cvexist.setFullName(cv.getFullName());
         cvexist.setEmail(cv.getEmail());
         cvexist.setTel(cv.getTel());
@@ -142,33 +147,57 @@ public  class CvServiceimpl implements CvService {
 
         System.out.printf("etape 3");
         List<Experience> experiences = cv.getExperiences().stream()
+                .map(cvMapper::toExperience)
                 .map(experienceRepository::save)
                 .collect(Collectors.toList());
 
         List<Education> formations = cv.getEducations().stream()
-                .map(formationRepository::save)
+                .map(educationDto -> formationRepository.save(cvMapper.toEducation(educationDto)))
                 .collect(Collectors.toList());
 
 
         cvexist.setExperiences(experiences);
         cvexist.setEducations(formations);
 
-        cv.setUpdatedAt(new java.util.Date());
-        return cvRepository.save(cvexist);
+        System.out.printf("etape 4");
+        cvexist.setUpdatedAt(new java.util.Date());
+        return cvMapper.toCvDto(cvRepository.save(cvexist));
     }
 
     @Override
-    public Cv createcvfromCvfile(MultipartFile file,String cvName, Authentication authentication) throws IOException {
-        String userId = commonService.getIdCvFromAuthentification(authentication);
+    public CvDto createcvfromCvfile(MultipartFile file, String cvName, Authentication authentication) throws IOException {
+        String userId = commonService.getIdUserFromAuthentification(authentication);
         CvDto cvDto = aiService.generateCvFromLocalFile(file);
         System.out.printf("etape cv gnerated from ai finished");
         Cv cv = cvMapper.toCv(cvDto);
         System.out.printf("mapping to normal cv finished");
         cv.setUserId(userId);
         cv.setCvName(cvName);
-        Cv savedCv = saveCv(cv);
+        CvDto savedCv = saveCv(cv);
         System.out.printf("cv saved");
         //String pdfPath = pdfService.generateCvPdf(savedCv);
         return savedCv;
+    }
+
+    @Override
+    public Cv updateModel(String cvid, String modelName, Authentication authentication) {
+        Cv cvexist = cvRepository.findById(cvid).orElseThrow(()->new RuntimeException("Not Found"));
+        cvexist.setModeleName(modelName);
+        Cv savedcv = cvRepository.save(cvexist);
+
+        return savedcv;
+    }
+
+    @Override
+    public Boolean deleteCv(String CvId){
+        try {
+            List<Letter> letters = letterRepository.findByCvId(CvId);
+            letterRepository.deleteAll(letters);
+            cvRepository.deleteById(CvId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 }
