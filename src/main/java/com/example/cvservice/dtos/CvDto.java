@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -25,6 +26,7 @@ public class CvDto {
     private String gender;
     private String phone;
     private String state;
+    private Date updatedAt;
     private String linkedin;
     private String website;
     private String userId;

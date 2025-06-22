@@ -180,12 +180,15 @@ public  class CvServiceimpl implements CvService {
     }
 
     @Override
-    public Cv updateModel(String cvid, String modelName, Authentication authentication) {
+    public CvDto updateModel(String cvid, String modelName, Authentication authentication) {
         Cv cvexist = cvRepository.findById(cvid).orElseThrow(()->new RuntimeException("Not Found"));
+        System.out.printf("first step 1");
         cvexist.setModeleName(modelName);
+        System.out.printf("seccond step 1");
         Cv savedcv = cvRepository.save(cvexist);
+        System.out.printf("third step 1");
 
-        return savedcv;
+        return cvMapper.toCvDto(savedcv);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.cvservice.dtos;
 
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ExperienceDto {
-    @JsonProperty("job_title")
+    @JsonAlias({"job_title", "title"})
     String title;
     String company;
     String start_date;

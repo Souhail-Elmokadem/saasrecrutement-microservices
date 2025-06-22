@@ -23,7 +23,7 @@ public interface CvService {
 
     CvDto createcvfromCvfile(MultipartFile file,String cvName, Authentication authentication) throws IOException;
 
-    Cv updateModel(String cvid,String modelName,  Authentication authentication);
+    CvDto updateModel(String cvid,String modelName,  Authentication authentication);
 
     Boolean deleteCv(String CvId);
 }

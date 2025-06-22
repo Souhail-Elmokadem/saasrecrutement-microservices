@@ -40,6 +40,8 @@ public class CvController {
                                               @RequestPart(value = "photo", required = false) MultipartFile photoFile,
                                               Authentication authentication) {
 
+        System.out.printf("++++++++++++++++++++++");
+        System.out.printf(cvDto.getExperiences().get(0).toString());
         String userid = commonService.getIdUserFromAuthentification(authentication);
         CvDto savedCv = cvService.saveCv(cvDto,userid,photoFile);
         return ResponseEntity.ok(Map.of("cv", savedCv));
@@ -78,7 +80,8 @@ public class CvController {
 
     @PostMapping("/updateModele")
     public ResponseEntity<?> uploadModele(@RequestParam("cvId") String cvId,@RequestParam("modeleName") String modelName,Authentication authentication) throws IOException {
-        Cv saved = cvService.updateModel(cvId,modelName,authentication);
+        System.out.printf(cvId+"+++"+modelName);
+        CvDto saved = cvService.updateModel(cvId,modelName,authentication);
         return ResponseEntity.ok(Map.of("cv", saved));
     }
 
@@ -86,6 +89,4 @@ public class CvController {
     public ResponseEntity<?> deleteCv(@PathVariable String cvId){
         return ResponseEntity.ok(cvService.deleteCv(cvId));
     }
-
-
 }

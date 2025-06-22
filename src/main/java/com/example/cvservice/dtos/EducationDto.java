@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 public class EducationDto {
      String degree;
      String school;
+     String branch;
      String start_date;
      String end_date;
 }
