@@ -1,0 +1,16 @@
+@media print {
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #cv-to-export {
+      width: 210mm !important;
+      height: 297mm !important;
+      box-shadow: none !important;
+      border: none !important;
+    }
+    .no-print, button {
+      display: none !important;
+    }
+  }
+  

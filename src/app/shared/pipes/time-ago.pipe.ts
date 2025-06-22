@@ -6,8 +6,20 @@ import { formatDistanceToNow } from 'date-fns';
   standalone:false
 })
 export class TimeAgoPipe implements PipeTransform {
-  transform(value: string): string {
-    return 'Edited ' + formatDistanceToNow(new Date(value), { addSuffix: true });
+  transform(value: any): string {
+    try {
+      const date = new Date(value);
+      if (isNaN(date.getTime())) {
+        return '';
+      }
+      return formatDistanceToNow(date, { addSuffix: true });
+    } catch (error) {
+      console.error('Invalid date for timeAgo pipe:', value);
+      return '';
+    }
   }
   
 }
+
+
+

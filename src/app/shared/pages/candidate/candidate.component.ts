@@ -8,8 +8,18 @@ import { filter } from 'rxjs';
   templateUrl: './candidate.component.html',
   styleUrl: './candidate.component.css'
 })
-export class CandidateComponent {
+export class CandidateComponent implements OnInit {
   
   
+  isLoading: boolean = true;
+
+
+ngOnInit(): void {
+   
+  setTimeout(() => {
+    this.isLoading = false;
+ 
+  }, 200); 
+  }
 
 }

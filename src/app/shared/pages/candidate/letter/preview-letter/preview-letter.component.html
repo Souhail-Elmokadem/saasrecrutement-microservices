@@ -1,0 +1,46 @@
+<div class="bg-gray-100 py-10 px-4 flex justify-center min-h-screen">
+    <div>
+      <!-- Export Button -->
+      <div class="text-center mb-6">
+        <button (click)="downloadPDF()" class=" right-10 fixed bottom-10 mt-4 px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+            Download PDF
+          </button>
+      </div>
+  
+      <!-- A4 Style Preview -->
+      <div
+        id="letter-preview"
+        class="bg-white w-[794px] h-[1123px] shadow-xl p-12 border border-gray-300 print:w-full print:h-full text-[15px] leading-relaxed text-gray-800 font-serif whitespace-pre-line"
+      >
+
+     
+  
+        <!-- Header -->
+        <div class="mb-6">
+          <h1 class="text-base font-bold mb-2">{{ letter.cv?.fullName }}</h1>
+          <p class="text-base mb-1">{{ letter.cv?.state || 'State not available' }}</p>
+          <p class="text-base mb-1">{{ letter.cv?.email ?? 'Email' }}</p>
+          <p class="text-base mb-1">{{ letter.cv?.phone }}</p>
+        </div>
+        <p class="text-base text-left  mb-6 tracking-wide">
+            Date: {{ letter.updatedAt ? (letter.updatedAt | date: 'yyyy-MM-dd') : 'yyyy-MM-dd' }}
+           </p>
+      
+        <!-- Object -->
+        <p class="text-base font-bold text-left  mb-6 tracking-wide">
+          Objet : {{ letter.object || 'Objet de la lettre de motivation' }}
+        </p>
+  
+        <!-- Content -->
+        <p>
+          {{ letter.content || 'Le contenu de la lettre sera affiché ici une fois généré...' }}
+        </p>
+  
+        <!-- Signature -->
+        <div class="mt-10 text-right">
+          <p class="font-semibold">Souhail El Idrissi</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -9,6 +9,8 @@ export interface Cv {
   cvName:string;
   linkedin: string;
   website: string;
+  modeleName: string;
+  photoUrl: string;
   state: string;
   title:string;
   updatedAt:string;

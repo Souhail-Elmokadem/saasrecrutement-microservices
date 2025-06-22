@@ -1,0 +1,59 @@
+<div class="flex justify-center items-center min-h-screen bg-[#fafafa]">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      <div
+        *ngFor="let template of templates"
+        class="relative group w-56 h-80 rounded-2xl overflow-hidden shadow-lg transition-transform transform hover:scale-105"
+        [class.cursor-pointer]="template.value === 'classic'"
+        [class.cursor-not-allowed]="template.value !== 'classic'"
+        (click)="template.value === 'classic' && selectTemplate(template)"
+      >
+        <!-- Image avec effet blur au hover -->
+        <img
+          [src]="template.preview"
+          alt="Template Preview"
+          class="w-full h-full object-cover transition-all duration-300 group-hover:blur-sm"
+        />
+  
+        <!-- Overlay avec bouton si classic -->
+     <!-- Conteneur avec effet flou sur hover -->
+<div
+*ngIf="template.value === 'classic'"
+class="absolute inset-0 group flex items-center justify-center"
+>
+
+<!-- Arrière-plan flou uniquement sur hover -->
+<div class="absolute inset-0 backdrop-blur-sm bg-black/20 transition duration-300 z-0 opacity-0"></div>
+
+<!-- Bouton au centre toujours visible -->
+<div class="z-10">
+  <button
+    (click)="handleCvPreview(template)"
+    class="px-4 py-2 rounded-lg  font-semibold hidden group-hover:block text-[#8B5CF6] transition duration-300"
+  >
+    {{ template.value !== cv.modeleName ? 'Choisir ce Modèle' : 'Voir Modèle' }}
+  </button>
+</div>
+</div>
+
+        <!-- Badge Coming Soon -->
+        <div
+          *ngIf="template.value !== 'classic'"
+          class="absolute top-2 left-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded font-semibold shadow-md"
+        >
+          Coming Soon
+        </div>
+        <div
+          *ngIf="template.value == cv?.modeleName"
+          class="absolute top-2 left-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded font-semibold shadow-md"
+        >
+          Actived
+        </div>
+  
+        <!-- Nom du template -->
+        <div class="absolute bottom-0 left-0 right-0 bg-[#8B5CF6] bg-opacity-80 text-center text-white py-1 text-sm font-medium">
+          {{ template.name }}
+        </div>
+      </div>
+    </div>
+  </div>
+  

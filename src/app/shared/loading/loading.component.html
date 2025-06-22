@@ -1,0 +1,11 @@
+<div
+  class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-opacity duration-500"
+  [ngClass]="{ 'opacity-0 pointer-events-none': !visible }"
+>
+  <!-- Spinner -->
+  <div class="animate-spin rounded-full border-t-4 border-indigo-500 border-opacity-50 h-16 w-16 mb-4"></div>
+
+  <!-- Text -->
+  <h1 class="text-xl font-semibold text-gray-700">Chargement en cours...</h1>
+  <p class="text-sm text-gray-500">Merci de patienter</p>
+</div>

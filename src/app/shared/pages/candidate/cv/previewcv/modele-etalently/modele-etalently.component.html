@@ -1,0 +1,58 @@
+<!-- Zone exportable A4 -->
+<div class="bg-[#f3f4f6] py-6 px-4 flex justify-center">
+  <div id="cv-to-export" class="w-[210mm] h-[297mm] bg-white shadow-md flex text-sm text-gray-800 print:w-full print:h-full">
+    
+    <!-- Sidebar -->
+    <aside class="w-[30%] bg-[#1f1f1f] text-white px-6 py-6 flex flex-col justify-start space-y-6">
+      <div>
+        <p class="text-sm">{{ cv?.email }}</p>
+        <p class="text-sm">{{ cv?.phone }}</p>
+        <p class="text-sm">{{ cv?.state }}</p>
+      </div>
+      <div>
+        <h2 class="text-base font-bold border-b border-gray-600 pb-1 mb-2">Langues</h2>
+        <ul class="list-disc pl-5 space-y-1 text-sm">
+          <li>Français</li>
+          <li>Anglais</li>
+          <li>Arabe</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-base font-bold border-b border-gray-600 pb-1 mb-2">Compétences</h2>
+        <ul class="list-disc pl-5 space-y-1 text-sm">
+          <li *ngFor="let skill of cv?.skills">{{ skill }}</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="w-[70%] px-6 py-6 space-y-6">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">{{ cv?.fullName }}</h1>
+        <p class="text-blue-600 font-medium uppercase tracking-wide">{{ cv?.title }}</p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-semibold text-blue-600 border-b border-gray-300 pb-1 mb-2">Résumé</h2>
+        <p class="text-gray-700 text-sm">{{ cv?.summary }}</p>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-semibold text-blue-600 border-b border-gray-300 pb-1 mb-2">Expériences</h2>
+        <div *ngFor="let exp of cv?.experiences" class="mb-3">
+          <p class="font-semibold">{{ exp.title }} - {{ exp.company }}</p>
+          <p class="text-xs text-gray-500">{{ exp.start_date }} → {{ exp.end_date }}</p>
+          <p class="text-sm text-gray-700 whitespace-pre-line">{{ exp.description }}</p>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-lg font-semibold text-blue-600 border-b border-gray-300 pb-1 mb-2">Formations</h2>
+        <div *ngFor="let ed of cv?.educations" class="mb-3">
+          <p class="font-semibold">{{ ed.degree }} - {{ ed.school }}</p>
+          <p class="text-xs text-gray-500">{{ ed.start_date }} → {{ ed.end_date }}</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

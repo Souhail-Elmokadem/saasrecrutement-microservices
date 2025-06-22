@@ -10,6 +10,7 @@ import { Experience } from '../../../models/Experience';
 })
 export class CvserviceService {
 
+
   
  
  
@@ -24,12 +25,16 @@ export class CvserviceService {
 
   createCv(cv: Cv,photo:File):Observable<Cv> {
     const formData = new FormData();
+    console.log("cv prefetch ++++++++++",cv)
     formData.append('photo', photo);
     formData.append('cv', new Blob([JSON.stringify(cv)], {type: 'application/json'}));
     return this.http.post<Cv>(`${this.apiUrl}/create`, formData);
   }
-  updateCv(Cv: Cv): Observable<Cv> {
-    return this.http.post<Cv>(`${this.apiUrl}/update`, Cv);
+  updateCv(cv: Cv,photo:File): Observable<Cv> {
+    const formData = new FormData();
+    formData.append('photo', photo);
+    formData.append('cv', new Blob([JSON.stringify(cv)], {type: 'application/json'}));
+    return this.http.post<Cv>(`${this.apiUrl}/update`, formData);
   }
 
   getCvByUser():Observable<Array<Cv>> {
@@ -38,4 +43,14 @@ export class CvserviceService {
   getCvById(cvid: string):Observable<Cv> {
     return this.http.get<Cv>(`${this.apiUrl}/getbyid/${cvid}`)
   }
+  updateModeleCv(cvid: string, modele: string): Observable<Cv> {
+    const formData = new FormData();
+    formData.append('cvId', cvid);
+    formData.append('modeleName', modele);
+    return this.http.post<Cv>(`${this.apiUrl}/updateModele`, formData);
+  }
+  deleteCv(cvid: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/delete/${cvid}`);
+  }
+  
 }

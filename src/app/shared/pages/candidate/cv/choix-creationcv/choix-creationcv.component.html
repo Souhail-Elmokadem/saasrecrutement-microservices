@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-[#fafafa] flex items-center justify-center px-4">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div class="flex flex-col items-center justify-center w-48 h-48 bg-white border border-gray-300 rounded-2xl shadow-lg animate-pulse">
+      <div class="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+      <p class="text-sm text-gray-700 font-medium">Chargement...</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading" class="bg-transparent text-gray-600 p-8 rounded-xl w-full max-w-md border border-[#f4f4fc] transition-all duration-500 ease-in-out">
+    
+    <!-- Step 1: Resume Name -->
+    <div *ngIf="step === 1" class="animate-fade-in">
+      <h2 class="text-2xl font-bold mb-2 text-center text-[#2d304b]">{{cvName || 'CV'}}</h2>
+      <p class="text-sm text-gray-400 text-center mb-6">Entrez un nom pour votre nouveau CV</p>
+
+      <input
+        type="text"
+        name="cvName"
+        [(ngModel)]="cvName"
+        required
+        minlength="3"
+        maxlength="50"
+        #cvname
+        autofocus
+        placeholder="Ex: Moncv1"
+        class="w-full px-4 py-2 mb-6 text-black  rounded-md outline-none bg-[#d5c7ff25] focus:ring-2 focus:ring-[#a78bfa] focus:border-transparent transition duration-300"
+      />
+      <div class="w-full pr-14">
+      <button
+        [disabled]="cvName.length < 3"
+        (click)="step = 2"
+        class="w-5 float-right  py-2 bg-transparent  text-gray-600 font-semibold rounded-md transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+     Continuer
+      </button>
+    </div>
+    </div>
+
+    <!-- Step 2: Import or Start -->
+    <div *ngIf="step === 2" class="animate-fade-in">
+      <h2 class="text-xl font-bold mb-2 text-center text-[#a78bfa]">Comment souhaitez-vous commencer ?</h2>
+      <p class="text-sm text-gray-400 text-center mb-6">Importer un CV ou créer à partir de zéro</p>
+
+      <div class="flex flex-col gap-3 ">
+        <!-- LinkedIn -->
+        <button
+          type="button"
+          class="flex items-center gap-3 px-4 py-2 bg-[#d5c7ff25]  hover:bg-[#c6b6f838] rounded-md transition duration-300 group"
+        >
+          <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" class="w-5 h-5" />
+          <span class="text-sm font-medium text-[#4b2991] ">Importer depuis LinkedIn</span>
+        </button>
+
+        <!-- Upload -->
+        <input #fileInput type="file" accept=".pdf,.doc,.docx" class="hidden" (change)="onFileSelected($event)" />
+        <button
+          type="button"
+          (click)="fileInput.click()"
+          class="flex items-center gap-3 px-4 py-2 bg-[#d5c7ff25] hover:bg-[#c6b6f838] rounded-md transition duration-300 group"
+        >
+          <svg class="w-5 h-5 text-purple-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span class="text-sm font-medium text-[#4b2991] ">Télécharger un CV (PDF/DOC)</span>
+        </button>
+      </div>
+
+      <!-- Divider -->
+      <div class="text-center my-6">
+        <span class="text-xs text-gray-500 uppercase">ou</span>
+      </div>
+
+      <!-- Start Scratch -->
+      <button
+        (click)="GoToCreationCv()"
+        class="w-full py-2 bg-[#d5c7ff25]  hover:bg-[#d5c7ff38] text-[#4b2991] font-semibold rounded-md transition duration-300 ease-in-out"
+      >
+        Créer à partir de zéro
+      </button>
+
+      <!-- Go Back -->
+      <button
+        (click)="step = 1"
+        class="w-full mt-3 py-2  hover:bg-gray-200 text-gray-600 font-semibold rounded-md transition duration-200"
+      >
+        Retour
+      </button>
+    </div>
+  </div>
+</div>
