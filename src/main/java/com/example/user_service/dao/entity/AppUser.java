@@ -28,4 +28,6 @@ public class AppUser {
     private String role; // ex: candidat, admin, etc.
     private LocalDate createdAt;
     private boolean enabled;
+
+
 }

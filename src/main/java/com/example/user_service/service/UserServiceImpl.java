@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .createdAt(LocalDate.now())
+                .photoUrl("http://localhost:8060/api/storages/media/download/f2f68f70-31a6-41ab-b685-6c11ac8c79e4_1749129109985a6ca611d-bd93-47ad-b567-a4d0c4f3436e.png")
                 .enabled(true)
                 .role(dto.getRole())
                 .build();
