@@ -1,13 +1,27 @@
 <div class="min-h-screen bg-gray-50 px-6 py-10">
     <!-- Tabs -->
     <div class="flex gap-2 mb-6">
-      <button class="px-5 py-1.5 rounded-lg text-xs font-bold bg-indigo-700 text-white shadow focus:outline-none">ALL JOBS (0)</button>
-      <button class="px-5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-white border border-gray-200">SAVED (0)</button>
-      <button class="px-5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-white border border-gray-200">APPLIED (0)</button>
-      <button class="px-5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-white border border-gray-200">INTERVIEWING (0)</button>
-      <button class="px-5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-white border border-gray-200">REJECTED (0)</button>
+      
+      <button (click)="updateSection(2)" 
+      [ngClass]="this.section===2?'bg-indigo-700 text-white shadow focus:outline-none':'text-indigo-700 bg-white border border-gray-200'"
+      class="px-5 py-1.5 rounded-lg text-xs font-semibold ">Recommended </button>
+      
+      <button (click)="updateSection(0)" 
+      [ngClass]="this.section===0?'bg-indigo-700 text-white shadow focus:outline-none':'text-indigo-700 bg-white border border-gray-200'"
+
+      class="px-5 py-1.5 rounded-lg text-xs font-bold">ALL JOBS ({{lentghOffers}})</button>
+
+      <button (click)="updateSection(1)" 
+      [ngClass]="this.section===1?'bg-indigo-700 text-white shadow focus:outline-none':'text-indigo-700 bg-white border border-gray-200'"
+      class="px-5 py-1.5 rounded-lg text-xs font-semibold ">SAVED </button>
+
+      
+      
     </div>
+
+
     
+    <div *ngIf="section === 0">
     <!-- Filters -->
     <div class="flex flex-col md:flex-row gap-3 md:gap-6 mb-8 bg-white border border-gray-200 rounded-xl p-4">
       <div class="flex-1 flex items-center bg-gray-100 rounded-lg px-3">
@@ -21,11 +35,23 @@
         class="bg-transparent w-full text-gray-700 placeholder:text-gray-400 outline-none"/>
       </div>
       <div class="flex-1 flex items-center bg-gray-100 rounded-lg px-3">
-        <svg class="w-5 h-5 text-indigo-400 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path d="M9 20l-5.447-2.724A2 2 0 013 15.382V6a2 2 0 012-2h14a2 2 0 002 2v9.382a2 2 0 01-1.553 1.894L15 20" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-        <input type="text" placeholder="Morocco" class="bg-transparent w-full text-gray-700 placeholder:text-gray-400 outline-none"/>
-      </div>
+        <input 
+        [(ngModel)]="cityQuery"
+        (ngModelChange)="searchCity()" 
+        type="text" 
+        placeholder="Search city..." 
+        class="bg-transparent w-full text-gray-700 placeholder:text-gray-400 outline-none py-2"
+      />
+    </div>
+  
+    <!-- Suggestions -->
+    <ul *ngIf="citySuggestions.length > 0" class="absolute z-10 right-36 top-36 w-50 float-right bg-white border rounded-md shadow max-h-60 overflow-y-auto">
+      <li *ngFor="let city of citySuggestions" 
+          (click)="selectCity(city)" 
+          class="px-4 py-2 hover:bg-indigo-100 cursor-pointer text-sm">
+        {{ city.city }}
+      </li>
+    </ul>
       <button class="px-4 py-2 flex items-center gap-2 bg-indigo-700 hover:bg-indigo-800 transition text-white rounded-lg font-semibold shadow">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
           <path d="M3 7h18M3 12h18M3 17h18" stroke-linecap="round" stroke-linejoin="round"/>
@@ -58,7 +84,8 @@
         <!-- Missions/Description -->
         <div class="col-span-5">
           <div class="flex items-start gap-2">
-            <svg class="w-5 h-5 text-indigo-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+            
+            <svg  class="w-5 h-5 text-indigo-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.364 1.118l1.286 3.967c.3.921-.755 1.688-1.539 1.118l-3.388-2.46a1 1 0 00-1.176 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.286-3.967a1 1 0 00-.364-1.118L2.049 9.394c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/>
             </svg>
             <span class="text-gray-700 text-sm">
@@ -71,11 +98,26 @@
         <div class="col-span-3 flex items-center gap-2 justify-end">
           <span class="text-gray-500 text-sm mr-2">{{ offer.createdAt | date:'MMM dd, yyyy' }}</span>
           <button class="px-3 py-1 rounded-md bg-indigo-700 text-white text-xs font-semibold hover:bg-indigo-800 transition shadow-sm">TARGET RESUME</button>
-          <button class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group">
-            <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 010 6.364L12 20.364l7.682-7.682a4.5 4.5 0 10-6.364-6.364l-1.318 1.318-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
-          </button>
-          <button class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group">
-            <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="2"/><circle cx="4" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
+          <button 
+          class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group"
+          (click)="toggleSavedJob(offer.id)">
+          <ng-container *ngIf="isSaved(offer.id); else notSaved">
+            <!-- ❤️ Filled -->
+            <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3.172 5.172a4.004 4.004 0 015.656 0L10 6.343l1.172-1.171a4.004 4.004 0 115.656 5.656L10 18.343 3.172 11.515a4.004 4.004 0 010-5.656z"/>
+            </svg>
+          </ng-container>
+          <ng-template #notSaved>
+            <!-- 🤍 Outline -->
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4.318 6.318a4.5 4.5 0 010 6.364L12 20.364l7.682-7.682a4.5 4.5 0 10-6.364-6.364l-1.318 1.318-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </ng-template>
+        </button>
+        
+          <button  class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group">
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+              <circle cx="10" cy="10" r="2"/><circle cx="4" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
           </button>
         </div>
       </div>
@@ -121,6 +163,193 @@
     </button>
   </nav>
 </div>
+</div>
 
+
+<div *ngIf="section===1">
+
+    
+    <!-- Table Header -->
+    <div class="overflow-hidden border border-gray-200 rounded-xl bg-white">
+      <div class="grid grid-cols-12 px-6 py-3 bg-gray-50 border-b border-gray-200 font-medium text-gray-500 text-sm">
+        <div class="col-span-4">Title</div>
+        <div class="col-span-5">Short Description</div>
+        <div class="col-span-3 text-right">Date</div>
+      </div>
+      
+      <!-- Table Rows -->
+      <div *ngFor="let offer of offerssaved" 
+        class="grid grid-cols-12 px-6 py-5 border-b border-gray-100 hover:bg-indigo-50 transition group items-center">
+        <!-- Title, Company, Location -->
+        <div class="col-span-4">
+          <div class="font-semibold text-gray-900 text-base group-hover:text-indigo-800">{{ offer.job.title }}</div>
+          <div class="flex items-center text-gray-500 mt-1 text-sm gap-2">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6z"/></svg>
+            <span>{{ offer.job.company }}</span>
+            <span class="mx-1">·</span>
+            <span>{{ offer.job.location }}</span>
+          </div>
+        </div>
+        <!-- Missions/Description -->
+        <div class="col-span-5">
+          <div class="flex items-start gap-2">
+            <svg class="w-5 h-5 text-indigo-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.364 1.118l1.286 3.967c.3.921-.755 1.688-1.539 1.118l-3.388-2.46a1 1 0 00-1.176 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.286-3.967a1 1 0 00-.364-1.118L2.049 9.394c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/>
+            </svg>
+            <span class="text-gray-700 text-sm">
+              {{ parseMissions(offer.job.missions)[0] }}
+              <span *ngIf="parseMissions(offer.job.missions).length > 1" class="text-gray-400">... </span>
+            </span>
+          </div>
+        </div>
+        <!-- Date, Actions -->
+        <div class="col-span-3 flex items-center gap-2 justify-end">
+          <span class="text-gray-500 text-sm mr-2">{{ offer.job.createdAt | date:'MMM dd, yyyy' }}</span>
+          <button class="px-3 py-1 rounded-md bg-indigo-700 text-white text-xs font-semibold hover:bg-indigo-800 transition shadow-sm">TARGET RESUME</button>
+          <button 
+          class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group"
+          (click)="toggleSavedJob(offer.job.id)">
+          <ng-container *ngIf="isSaved(offer.job.id); else notSaved">
+            <!-- ❤️ Filled -->
+            <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M3.172 5.172a4.004 4.004 0 015.656 0L10 6.343l1.172-1.171a4.004 4.004 0 115.656 5.656L10 18.343 3.172 11.515a4.004 4.004 0 010-5.656z"/>
+            </svg>
+          </ng-container>
+          <ng-template #notSaved>
+            <!-- 🤍 Outline -->
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M4.318 6.318a4.5 4.5 0 010 6.364L12 20.364l7.682-7.682a4.5 4.5 0 10-6.364-6.364l-1.318 1.318-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+            </svg>
+          </ng-template>
+        </button>
+        
+          <button class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group">
+            <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="2"/><circle cx="4" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="offerssaved.length===0">
+        <div class="px-6 py-5 text-gray-500 text-center">
+          Aucune offre enregistrée.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Pagination -->
+
+
+<div class="flex justify-between items-center absolute bottom-3 right-10">
+  <div class="text-sm text-gray-500 mr-6">Page {{ pageSaved + 1 }} sur {{ totalPages }}</div>
+
+  <nav class="flex items-center gap-1">
+    <button 
+      (click)="changePageSaved(pageSaved - 1)" 
+      [disabled]="pageSaved === 0"
+      class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50">
+      ←
+    </button>
+
+    <ng-container *ngFor="let i of getPaginationRangeforOfferSaved()">
+      <ng-container *ngIf="i === -1 || i === -2">
+        <span class="px-2 py-1.5 text-sm text-gray-400">...</span>
+      </ng-container>
+      <ng-container *ngIf="i >= 0">
+        <button 
+          (click)="changePageSaved(i)"
+          [ngClass]="{
+            'bg-indigo-700 text-white': i === pageSaved,
+            'bg-white text-gray-800 hover:bg-indigo-100': i !== pageSaved
+          }"
+          class="w-8 h-8 rounded-md text-sm font-medium border border-gray-300 transition">
+          {{ i + 1 }}
+        </button>
+      </ng-container>
+    </ng-container>
+
+    <button 
+      (click)="changePageSaved(pageSaved + 1)" 
+      [disabled]="pageSaved === TotalPagesSaved - 1"
+      class="px-3 py-1.5 text-sm rounded-md border border-gray-300 bg-white hover:bg-gray-50 disabled:opacity-50">
+      →
+    </button>
+  </nav>
+</div>
+</div>
+
+
+<div *ngIf="section===2">
+
+    
+  <!-- Table Header -->
+  <div class="overflow-hidden border border-gray-200 rounded-xl bg-white">
+    <div class="grid grid-cols-12 px-6 py-3 bg-gray-50 border-b border-gray-200 font-medium text-gray-500 text-sm">
+      <div class="col-span-4">Title</div>
+      <div class="col-span-5">Short Description</div>
+      <div class="col-span-3 text-right">Date</div>
+    </div>
+    
+    <!-- Table Rows -->
+    <div *ngFor="let offer of offerrecommended" 
+      class="grid grid-cols-12 px-6 py-5 border-b border-gray-100 hover:bg-indigo-50 transition group items-center">
+      <!-- Title, Company, Location -->
+      <div class="col-span-4">
+        <div class="font-semibold text-gray-900 text-base group-hover:text-indigo-800">{{ offer.title }}</div>
+        <div class="flex items-center text-gray-500 mt-1 text-sm gap-2">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2H6z"/></svg>
+          <span>{{ offer.company }}</span>
+          <span class="mx-1">·</span>
+          <span>{{ offer.location }}</span>
+        </div>
+      </div>
+      <!-- Missions/Description -->
+      <div class="col-span-5">
+        <div class="flex items-start gap-2">
+          <svg class="w-5 h-5 text-indigo-400 mt-1" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.178c.969 0 1.371 1.24.588 1.81l-3.388 2.46a1 1 0 00-.364 1.118l1.286 3.967c.3.921-.755 1.688-1.539 1.118l-3.388-2.46a1 1 0 00-1.176 0l-3.388 2.46c-.784.57-1.838-.197-1.539-1.118l1.286-3.967a1 1 0 00-.364-1.118L2.049 9.394c-.783-.57-.38-1.81.588-1.81h4.178a1 1 0 00.95-.69l1.286-3.967z"/>
+          </svg>
+          <span class="text-gray-700 text-sm">
+            {{ parseMissions(offer.missions)[0] }}
+            <span *ngIf="parseMissions(offer.missions).length > 1" class="text-gray-400">... </span>
+          </span>
+        </div>
+      </div>
+      <!-- Date, Actions -->
+      <div class="col-span-3 flex items-center gap-2 justify-end">
+        <span class="text-gray-500 text-sm mr-2">{{ offer.createdAt | date:'MMM dd, yyyy' }}</span>
+        <button class="px-3 py-1 rounded-md bg-indigo-700 text-white text-xs font-semibold hover:bg-indigo-800 transition shadow-sm">TARGET RESUME</button>
+        <button 
+        class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group"
+        (click)="toggleSavedJob(offer.id)">
+        <ng-container *ngIf="isSaved(offer.id); else notSaved">
+          <!-- ❤️ Filled -->
+          <svg class="w-5 h-5 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M3.172 5.172a4.004 4.004 0 015.656 0L10 6.343l1.172-1.171a4.004 4.004 0 115.656 5.656L10 18.343 3.172 11.515a4.004 4.004 0 010-5.656z"/>
+          </svg>
+        </ng-container>
+        <ng-template #notSaved>
+          <!-- 🤍 Outline -->
+          <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M4.318 6.318a4.5 4.5 0 010 6.364L12 20.364l7.682-7.682a4.5 4.5 0 10-6.364-6.364l-1.318 1.318-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+          </svg>
+        </ng-template>
+      </button>
+      
+        <button class="ml-1 w-8 h-8 flex items-center justify-center rounded-md hover:bg-gray-200 transition group">
+          <svg class="w-5 h-5 text-gray-400 group-hover:text-indigo-600" fill="currentColor" viewBox="0 0 20 20"><circle cx="10" cy="10" r="2"/><circle cx="4" cy="10" r="2"/><circle cx="16" cy="10" r="2"/></svg>
+        </button>
+      </div>
+    </div>
+
+    
+  </div>
+
+
+  <!-- Pagination -->
+
+
+
+</div>
   </div>
   
