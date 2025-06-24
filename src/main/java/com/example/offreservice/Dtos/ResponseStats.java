@@ -6,13 +6,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponseApi<T>{
-    List<T> items;
-    int totalItems;
-    int totalPages;
+public class ResponseStats<T,J>{
+    List<T> recommendedJobs;
+    List<J> savedJobs;
+    Integer totalSavedJobs;
 }

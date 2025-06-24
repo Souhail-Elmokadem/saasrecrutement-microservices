@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -54,6 +56,9 @@ public class Job {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+
+    @OneToMany(mappedBy = "job", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SavedJob> savedJobs = new ArrayList<>();
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;

@@ -1,18 +1,19 @@
 package com.example.offreservice.Dtos;
 
+import com.example.offreservice.dao.entities.Job;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ResponseApi<T>{
-    List<T> items;
-    int totalItems;
-    int totalPages;
+
+public class SavedJobDTO {
+    private Long savedJobId;
+    private JobDTO job;
+    private String userId;
 }

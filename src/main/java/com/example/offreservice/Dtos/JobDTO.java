@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @ToString
 public class JobDTO {
 
+    private Integer id;
     private String title;
 
     private String company;
