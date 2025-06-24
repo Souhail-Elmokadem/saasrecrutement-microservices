@@ -89,4 +89,12 @@ public class CvController {
     public ResponseEntity<?> deleteCv(@PathVariable String cvId){
         return ResponseEntity.ok(cvService.deleteCv(cvId));
     }
+
+
+    @GetMapping("/stats")
+    public Map<?,?> getCvStats(Authentication authentication){
+        String userid = commonService.getIdUserFromAuthentification(authentication);
+        return cvService.getStats(userid);
+
+    }
 }

@@ -11,4 +11,5 @@ import java.util.UUID;
 
 public interface CvRepository extends JpaRepository<Cv, String> {
     Page<Cv> findCvByUserId(String id, PageRequest pageRequest);
+    List<Cv> findCvByUserId(String id);
 }

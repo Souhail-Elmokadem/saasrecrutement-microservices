@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface CvService {
     List<Cv> getAllCvs();
@@ -26,4 +27,7 @@ public interface CvService {
     CvDto updateModel(String cvid,String modelName,  Authentication authentication);
 
     Boolean deleteCv(String CvId);
+
+
+    Map<String,String> getStats(String userid);
 }

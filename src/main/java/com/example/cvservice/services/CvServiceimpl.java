@@ -24,7 +24,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -202,5 +204,16 @@ public  class CvServiceimpl implements CvService {
             return false;
         }
 
+    }
+
+
+    @Override
+    public Map<String,String> getStats(String userid){
+        Map<String,String> map = new HashMap<>();
+        int cvnombres = cvRepository.findCvByUserId(userid).size();
+        int letternombres = letterRepository.findByUserid(userid).size();
+        map.put("cvnombres",String.valueOf(cvnombres));
+        map.put("letternombres",String.valueOf(letternombres));
+        return map;
     }
 }
